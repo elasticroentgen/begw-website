@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   begw-website:
-    build: .
+    image: docker pull ghcr.io/elasticroentgen/begw-website:main
     ports:
       - "8080:80"
     restart: unless-stopped

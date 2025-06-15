@@ -265,6 +265,21 @@ a:hover {
     align-items: center;
 }
 
+.hero-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(46, 139, 87, 0.2);
+    background: linear-gradient(135deg, var(--light-bg) 0%, #E8F5E8 100%);
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.hero-image img:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(46, 139, 87, 0.3);
+}
+
 .energy-icon {
     width: 200px;
     height: 200px;
