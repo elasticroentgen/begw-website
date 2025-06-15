@@ -12,24 +12,51 @@ class EmailService {
             passLength: process.env.MAIL_PASS ? process.env.MAIL_PASS.length : 0
         });
 
-        this.transporter = nodemailer.createTransport({
+        // Try different authentication methods based on common configurations
+        const port = parseInt(process.env.MAIL_PORT) || 587;
+        const isSecure = port === 465 || process.env.MAIL_SECURE === 'true';
+        
+        this.transporter = nodemailer.createTransporter({
             host: process.env.MAIL_HOST,
-            port: parseInt(process.env.MAIL_PORT) || 587,
-            secure: process.env.MAIL_SECURE === 'true', // true for 465, false for other ports
-            requireTLS: true,
+            port: port,
+            secure: isSecure,
+            // Force TLS for non-secure connections
+            requireTLS: !isSecure,
             auth: {
                 user: process.env.MAIL_USER,
                 pass: process.env.MAIL_PASS
             },
             tls: {
-                // Don't fail on invalid certs (for self-signed certificates)
+                // Don't fail on invalid certs
                 rejectUnauthorized: false,
-                // Allow legacy TLS renegotiation
-                secureProtocol: 'TLSv1_2_method'
+                // Force minimum TLS version
+                minVersion: 'TLSv1.2',
+                // Cipher settings for better compatibility
+                ciphers: 'SSLv3',
+                // Disable specific extensions that might cause issues
+                honorCipherOrder: true
             },
-            // Enable debug output
+            // Connection timeout
+            connectionTimeout: 10000,
+            greetingTimeout: 5000,
+            socketTimeout: 10000,
+            // Enable debug output in development
             debug: process.env.NODE_ENV !== 'production',
             logger: process.env.NODE_ENV !== 'production'
+        });
+
+        // Alternative transporter for fallback
+        this.fallbackTransporter = nodemailer.createTransporter({
+            host: process.env.MAIL_HOST,
+            port: 465, // Try SSL port
+            secure: true,
+            auth: {
+                user: process.env.MAIL_USER,
+                pass: process.env.MAIL_PASS
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
         });
     }
 
@@ -79,7 +106,6 @@ class EmailService {
             html = html.replace(/\{\{\/if\}\}/g, '');
             html = html.replace(/\{\{phone\}\}/g, data.phone);
         } else {
-            // Remove the entire phone section
             html = html.replace(/\{\{#if phone\}\}[\s\S]*?\{\{\/if\}\}/g, '');
         }
 
@@ -88,7 +114,6 @@ class EmailService {
             html = html.replace(/\{\{#if newsletter\}\}/g, '');
             html = html.replace(/\{\{\/if\}\}/g, '');
         } else {
-            // Remove the entire newsletter section
             html = html.replace(/\{\{#if newsletter\}\}[\s\S]*?\{\{\/if\}\}/g, '');
         }
 
@@ -96,33 +121,50 @@ class EmailService {
     }
 
     async sendContactEmail(formData) {
+        let lastError;
+        
+        // Try main transporter first
         try {
-            // Verify transporter configuration
             await this.transporter.verify();
-            
-            const template = await this.loadEmailTemplate();
-            const htmlContent = this.replaceTemplateVariables(template, formData);
-            
-            const mailOptions = {
-                from: {
-                    name: 'BEGW Kontaktformular',
-                    address: process.env.MAIL_FROM
-                },
-                to: process.env.MAIL_TO,
-                replyTo: formData.email,
-                subject: `Neue Kontaktanfrage: ${this.getSubjectText(formData.subject)} - ${formData.name}`,
-                html: htmlContent,
-                text: this.generatePlainTextEmail(formData)
-            };
-
-            const result = await this.transporter.sendMail(mailOptions);
-            console.log('Email sent successfully:', result.messageId);
-            return { success: true, messageId: result.messageId };
-            
+            return await this._sendWithTransporter(this.transporter, formData);
         } catch (error) {
-            console.error('Error sending email:', error);
-            throw new Error(`Failed to send email: ${error.message}`);
+            console.warn('Primary transporter failed:', error.message);
+            lastError = error;
         }
+
+        // Try fallback transporter
+        try {
+            console.log('Trying fallback transporter (port 465)...');
+            await this.fallbackTransporter.verify();
+            return await this._sendWithTransporter(this.fallbackTransporter, formData);
+        } catch (error) {
+            console.error('Fallback transporter also failed:', error.message);
+            lastError = error;
+        }
+
+        // Both failed, throw the last error
+        throw new Error(`All email sending attempts failed. Last error: ${lastError.message}`);
+    }
+
+    async _sendWithTransporter(transporter, formData) {
+        const template = await this.loadEmailTemplate();
+        const htmlContent = this.replaceTemplateVariables(template, formData);
+        
+        const mailOptions = {
+            from: {
+                name: 'BEGW Kontaktformular',
+                address: process.env.MAIL_FROM
+            },
+            to: process.env.MAIL_TO,
+            replyTo: formData.email,
+            subject: `Neue Kontaktanfrage: ${this.getSubjectText(formData.subject)} - ${formData.name}`,
+            html: htmlContent,
+            text: this.generatePlainTextEmail(formData)
+        };
+
+        const result = await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully:', result.messageId);
+        return { success: true, messageId: result.messageId };
     }
 
     generatePlainTextEmail(data) {
@@ -157,12 +199,24 @@ class EmailService {
 
     async testConnection() {
         try {
+            console.log('Testing primary transporter...');
             await this.transporter.verify();
-            console.log('✓ Email service connection successful');
+            console.log('✓ Primary email service connection successful');
             return true;
-        } catch (error) {
-            console.error('✗ Email service connection failed:', error.message);
-            return false;
+        } catch (error1) {
+            console.warn('✗ Primary transporter failed:', error1.message);
+            
+            try {
+                console.log('Testing fallback transporter...');
+                await this.fallbackTransporter.verify();
+                console.log('✓ Fallback email service connection successful');
+                return true;
+            } catch (error2) {
+                console.error('✗ Both email service connections failed');
+                console.error('Primary error:', error1.message);
+                console.error('Fallback error:', error2.message);
+                return false;
+            }
         }
     }
 }
