@@ -1,0 +1,117 @@
+{{ define "main" }}
+<!-- Hero Section -->
+<section id="home" class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>Gemeinsam für eine nachhaltige Energiezukunft</h1>
+            <p class="hero-subtitle">Die Bürgerenergie Genossenschaft Westsachsen eG – Ihre lokale Energiegemeinschaft für erneuerbare Energie und Bürgerbeteiligung in der Region Westsachsen.</p>
+            <div class="hero-buttons">
+                <a href="#about" class="btn btn-primary">Mehr erfahren</a>
+                <a href="{{ "kontakt" | relURL }}" class="btn btn-secondary">Kontakt aufnehmen</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="{{ "assets/logo.jpeg" | relURL }}" alt="BEGW Logo">
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="about">
+    <div class="container">
+        <div class="section-header">
+            <h2>Über die Bürgerenergie Genossenschaft Westsachsen eG</h2>
+            <p>Ihre regionale Energiegenossenschaft für eine nachhaltige Zukunft</p>
+        </div>
+        <div class="about-content">
+            <div class="about-text">
+                <h3>Unsere Mission</h3>
+                <p>Wir treiben die Energiewende in Westsachsen aktiv, dezentral und gemeinschaftlich voran – von Bürgern für Bürger. Als regionale Energiegenossenschaft bieten wir allen Menschen, Institutionen, Kommunen und Unternehmen die Möglichkeit, sich direkt an erneuerbaren Energieprojekten zu beteiligen.
+Unsere Grundwerte sind demokratische Mitbestimmung, Gemeinwohlorientierung und Solidarität. Die erwirtschaftete Wertschöpfung bleibt in der Region und fließt in weitere nachhaltige Projekte.
+Durch klimaneutrale Energieerzeugung leisten wir einen konkreten Beitrag zum Klimaschutz und zum Erhalt unserer natürlichen Lebensgrundlagen.</p>
+                <p><b>Gestalten Sie mit uns gemeinsam die Energiezukunft Westsachsens!</b></p>
+                
+                <h3>Unsere Werte</h3>
+                <ul class="values-list">
+                    <li><i class="fas fa-leaf"></i> Nachhaltigkeit und Umweltschutz</li>
+                    <li><i class="fas fa-users"></i> Genossenschaftliche Zusammenarbeit</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Regionale Wertschöpfung</li>
+                    <li><i class="fas fa-lightbulb"></i> Innovation und Zukunftsorientierung</li>
+                </ul>
+            </div>
+            <div class="about-stats">
+                <div class="stat-item">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">Mitglieder</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100kW</div>
+                    <div class="stat-label">Geplante Leistung</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">70t</div>
+                    <div class="stat-label">Geplante CO₂ Einsparung/Jahr</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="services">
+    <div class="container">
+        <div class="section-header">
+            <h2>Unsere Leistungen</h2>
+            <p>Vielfältige Angebote für eine nachhaltige Energiezukunft</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-solar-panel"></i>
+                </div>
+                <h3>Photovoltaik-Anlagen</h3>
+                <p>Planung, Installation und Betrieb von Solaranlagen auf Dächern und Freiflächen in der Region.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-battery-full"></i>
+                </div>
+                <h3>Energiespeicher</h3>
+                <p>Moderne Batteriespeichersysteme für eine optimale Nutzung erneuerbarer Energien.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <h3>Bürgerstrom</h3>
+                <p>Direktvermarktung von lokal erzeugtem Strom an Genossenschaftsmitglieder und Nachbarn.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Energieberatung</h3>
+                <p>Kompetente Beratung zu Energieeffizienz und erneuerbaren Energien für Privat und Gewerbe.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Mitgliedschaft</h3>
+                <p>Werden Sie Teil unserer Energiegemeinschaft und profitieren Sie von attraktiven Renditen.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Werden Sie Teil der Energiewende</h2>
+            <p>Investieren Sie in eine nachhaltige Zukunft und profitieren Sie von stabilen Erträgen. Gemeinsam gestalten wir die Energieversorgung von morgen.</p>
+            <a href="{{ "kontakt" | relURL }}" class="btn btn-primary btn-large">Jetzt Mitglied werden</a>
+        </div>
+    </div>
+</section>
+{{ end }}

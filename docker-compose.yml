@@ -2,8 +2,36 @@ version: '3.8'
 
 services:
   begw-website:
-    image: docker pull ghcr.io/elasticroentgen/begw-website:main
+    build: .
     ports:
       - "8080:80"
     restart: unless-stopped
     container_name: begw-website
+    depends_on:
+      - begw-api
+    environment:
+      - API_URL=http://begw-api:3000
+
+  begw-api:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    container_name: begw-api
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - MAIL_HOST=mail.buergerenergie-westsachsen.de
+      - MAIL_PORT=587
+      - MAIL_SECURE=false
+      - MAIL_USER=kontakt-formular
+      - MAIL_PASS=${MAIL_PASS}
+      - MAIL_FROM=kontakt-formular@buergerenergie-westsachsen.de
+      - MAIL_TO=info@buergerenergie-westsachsen.de
+      - FRONTEND_URL=http://localhost:8080
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

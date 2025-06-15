@@ -1,0 +1,220 @@
+{{ define "main" }}
+{{ if eq .Title "Kontakt" }}
+<section class="page-header">
+    <div class="container">
+        <h1>{{ .Title }}</h1>
+        <p>Nehmen Sie Kontakt mit uns auf – wir freuen uns auf Ihre Nachricht</p>
+    </div>
+</section>
+
+<section class="contact-section">
+    <div class="container">
+        <div class="contact-content">
+            <div class="contact-info">
+                <h2>Kontaktinformationen</h2>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Adresse</h3>
+                        <p>Bürgerenergie Genossenschaft<br>
+                        Westsachsen eG<br>
+                        Musterstraße 123<br>
+                        08412 Werdau</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Telefon</h3>
+                        <p>+49 (0) 3761 123456</p>
+                        <p class="contact-note">Mo-Fr: 9:00 - 17:00 Uhr</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>E-Mail</h3>
+                        <p>info@buergerenergie-westsachsen.de</p>
+                        <p class="contact-note">Wir antworten innerhalb von 24h</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Öffnungszeiten</h3>
+                        <p>Montag - Freitag: 9:00 - 17:00 Uhr<br>
+                        Termine nach Vereinbarung möglich</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-container">
+                <h2>Nachricht senden</h2>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">E-Mail-Adresse *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Telefonnummer</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Betreff *</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Bitte wählen...</option>
+                            <option value="mitgliedschaft">Mitgliedschaft</option>
+                            <option value="investment">Investitionsmöglichkeiten</option>
+                            <option value="photovoltaik">Photovoltaik-Anlagen</option>
+                            <option value="windenergie">Windenergie</option>
+                            <option value="beratung">Energieberatung</option>
+                            <option value="allgemein">Allgemeine Anfrage</option>
+                            <option value="sonstiges">Sonstiges</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Ihre Nachricht *</label>
+                        <textarea id="message" name="message" rows="6" required placeholder="Beschreiben Sie Ihr Anliegen..."></textarea>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="privacy" name="privacy" required>
+                            <span class="checkmark"></span>
+                            Ich habe die <a href="{{ "impressum" | relURL }}#datenschutz">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu. *
+                        </label>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="newsletter" name="newsletter">
+                            <span class="checkmark"></span>
+                            Ich möchte den Newsletter der BEGW erhalten und über aktuelle Projekte und Veranstaltungen informiert werden.
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-paper-plane"></i>
+                        Nachricht senden
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="map-section">
+    <div class="container">
+        <h2>So finden Sie uns</h2>
+        <div class="map-container">
+            <div class="map-placeholder">
+                <i class="fas fa-map-marked-alt"></i>
+                <p>Interaktive Karte wird hier angezeigt</p>
+                <p class="map-note">Musterstraße 123, 08412 Werdau</p>
+            </div>
+        </div>
+    </div>
+</section>
+{{ else if eq .Title "Impressum" }}
+<section class="page-header">
+    <div class="container">
+        <h1>{{ .Title }}</h1>
+        <p>Rechtliche Informationen und Datenschutzerklärung</p>
+    </div>
+</section>
+
+<section class="legal-section">
+    <div class="container">
+        <div class="legal-content">
+            <div class="impressum">
+                <div class="legal-info">
+                    <h3>Impressum</h3>
+                    <h4>Angaben gemäß § 5 TMG</h4>
+                    <p><strong>Bürgerenergie Genossenschaft Westsachsen eG</strong><br>
+                    Musterstraße 123<br>
+                    08412 Werdau</p>
+
+                    <p><strong>Vertreten durch den Vorstand:</strong><br>
+                    Max Mustermann (Vorsitzender)<br>
+                    Erika Musterfrau (stellv. Vorsitzende)</p>
+
+                    <p><strong>Kontakt:</strong><br>
+                    Telefon: +49 (0) 3761 123456<br>
+                    E-Mail: info@buergerenergie-westsachsen.de</p>
+
+                    <p><strong>Registereintrag:</strong><br>
+                    Eingetragen im Genossenschaftsregister<br>
+                    Registergericht: Amtsgericht Chemnitz<br>
+                    Registernummer: GenR 123</p>
+
+                    <p><strong>Wirtschafts-Identifikationsnummer:</strong><br>
+                    DE123456789</p>
+
+                    <p><strong>Aufsichtsbehörde:</strong><br>
+                    Sächsisches Staatsministerium für Wirtschaft, Arbeit und Verkehr<br>
+                    Wilhelm-Buck-Straße 2<br>
+                    01097 Dresden</p>
+                </div>
+
+                <h3>Haftungsausschluss</h3>
+                <h4>Haftung für Inhalte</h4>
+                <p>Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht unter der Verpflichtung, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
+
+                <h4>Haftung für Links</h4>
+                <p>Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.</p>
+
+                <h4>Urheberrecht</h4>
+                <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>
+            </div>
+
+            <div class="datenschutz" id="datenschutz">
+                <h3>Datenschutzerklärung</h3>
+                <h4>Datenschutz auf einen Blick</h4>
+                <p><strong>Allgemeine Hinweise:</strong> Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.</p>
+
+                <h4>Datenerfassung auf dieser Website</h4>
+                <p><strong>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong><br>
+                Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum dieser Website entnehmen.</p>
+
+                <p><strong>Wie erfassen wir Ihre Daten?</strong><br>
+                Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z. B. um Daten handeln, die Sie in ein Kontaktformular eingeben.</p>
+
+                <h4>Kontaktformular</h4>
+                <p>Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.</p>
+
+                <h4>Ihre Rechte</h4>
+                <p>Sie haben jederzeit das Recht unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung, Sperrung oder Löschung dieser Daten zu verlangen.</p>
+
+                <div class="contact-data-protection">
+                    <h4>Datenschutzbeauftragter</h4>
+                    <p>Bei Fragen zum Datenschutz wenden Sie sich bitte an:<br>
+                    <strong>Bürgerenergie Genossenschaft Westsachsen eG</strong><br>
+                    Musterstraße 123<br>
+                    08412 Werdau<br>
+                    E-Mail: datenschutz@buergerenergie-westsachsen.de</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{{ end }}
+{{ end }}

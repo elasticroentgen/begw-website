@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="de">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontakt - Bürgerenergie Genossenschaft Westsachsen eG</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%232E8B57'/><path d='M30 50 L45 35 L70 50 L45 65 Z' fill='%23FFD700'/></svg>">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo-container">
+                    <a href="/">
+                        <img src="/assets/logo.jpeg" alt="BEGW Logo" class="logo" id="logo-placeholder">
+                        <span class="company-name">BEGW eG</span>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="/" class="nav-link">Start</a></li>
+                    <li><a href="/#about" class="nav-link">Über uns</a></li>
+                    <li><a href="/#services" class="nav-link">Leistungen</a></li>
+                    <li><a href="/kontakt" class="nav-link active">Kontakt</a></li>
+                    <li><a href="/impressum" class="nav-link">Impressum</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+<main>
+
+
+<section class="page-header">
+    <div class="container">
+        <h1>Kontakt</h1>
+        <p>Nehmen Sie Kontakt mit uns auf – wir freuen uns auf Ihre Nachricht</p>
+    </div>
+</section>
+
+<section class="contact-section">
+    <div class="container">
+        <div class="contact-content">
+            <div class="contact-info">
+                <h2>Kontaktinformationen</h2>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Adresse</h3>
+                        <p>Bürgerenergie Genossenschaft<br>
+                        Westsachsen eG<br>
+                        Musterstraße 123<br>
+                        08412 Werdau</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Telefon</h3>
+                        <p>+49 (0) 3761 123456</p>
+                        <p class="contact-note">Mo-Fr: 9:00 - 17:00 Uhr</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>E-Mail</h3>
+                        <p>info@buergerenergie-westsachsen.de</p>
+                        <p class="contact-note">Wir antworten innerhalb von 24h</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Öffnungszeiten</h3>
+                        <p>Montag - Freitag: 9:00 - 17:00 Uhr<br>
+                        Termine nach Vereinbarung möglich</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-container">
+                <h2>Nachricht senden</h2>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">E-Mail-Adresse *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Telefonnummer</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Betreff *</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Bitte wählen...</option>
+                            <option value="mitgliedschaft">Mitgliedschaft</option>
+                            <option value="investment">Investitionsmöglichkeiten</option>
+                            <option value="photovoltaik">Photovoltaik-Anlagen</option>
+                            <option value="windenergie">Windenergie</option>
+                            <option value="beratung">Energieberatung</option>
+                            <option value="allgemein">Allgemeine Anfrage</option>
+                            <option value="sonstiges">Sonstiges</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Ihre Nachricht *</label>
+                        <textarea id="message" name="message" rows="6" required placeholder="Beschreiben Sie Ihr Anliegen..."></textarea>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="privacy" name="privacy" required>
+                            <span class="checkmark"></span>
+                            Ich habe die <a href="/impressum#datenschutz">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu. *
+                        </label>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="newsletter" name="newsletter">
+                            <span class="checkmark"></span>
+                            Ich möchte den Newsletter der BEGW erhalten und über aktuelle Projekte und Veranstaltungen informiert werden.
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-paper-plane"></i>
+                        Nachricht senden
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="map-section">
+    <div class="container">
+        <h2>So finden Sie uns</h2>
+        <div class="map-container">
+            <div class="map-placeholder">
+                <i class="fas fa-map-marked-alt"></i>
+                <p>Interaktive Karte wird hier angezeigt</p>
+                <p class="map-note">Musterstraße 123, 08412 Werdau</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+</main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="/assets/logo.jpeg" alt="BEGW Logo" class="logo-footer" id="logo-footer-placeholder">
+                        <span class="company-name">BEGW eG</span>
+                    </div>
+                    <p>Bürgerenergie Genossenschaft Westsachsen eG</p>
+                    <p>Regional.Erneuerbar.Engagiert.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Kontakt</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Musterstraße 123, 08412 Werdau</p>
+                    <p><i class="fas fa-phone"></i> +49 (0) 3761 123456</p>
+                    <p><i class="fas fa-envelope"></i> info@buergerenergie-westsachsen.de</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="/#about">Über uns</a></li>
+                        <li><a href="/#services">Leistungen</a></li>
+                        <li><a href="/kontakt">Kontakt</a></li>
+                        <li><a href="/impressum">Impressum</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Folgen Sie uns</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Bürgerenergie Genossenschaft Westsachsen eG. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

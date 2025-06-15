@@ -1,8 +1,20 @@
-# Use the official nginx image as base
+# Multi-stage build
+FROM klakegg/hugo:0.111.3-alpine AS builder
+
+# Set working directory
+WORKDIR /src
+
+# Copy Hugo site files
+COPY . .
+
+# Build the Hugo site
+RUN hugo --minify
+
+# Production stage
 FROM nginx:alpine
 
-# Copy the website files to nginx html directory
-COPY . /usr/share/nginx/html/
+# Copy the built site from the builder stage
+COPY --from=builder /src/public /usr/share/nginx/html/
 
 # Expose port 80
 EXPOSE 80

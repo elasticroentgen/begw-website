@@ -1,0 +1,13 @@
+baseURL = 'https://buergerenergie-westsachsen.de'
+languageCode = 'de-de'
+title = 'Bürgerenergie Genossenschaft Westsachsen eG'
+defaultContentLanguage = 'de'
+
+[params]
+  description = 'Ihre regionale Energiegenossenschaft für eine nachhaltige Zukunft'
+  author = 'Bürgerenergie Genossenschaft Westsachsen eG'
+  
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
