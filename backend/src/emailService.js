@@ -4,7 +4,7 @@ const path = require('path');
 
 class EmailService {
     constructor() {
-        this.transporter = nodemailer.createTransporter({
+        this.transporter = nodemailer.createTransport({
             host: process.env.MAIL_HOST,
             port: parseInt(process.env.MAIL_PORT) || 587,
             secure: process.env.MAIL_SECURE === 'true',
