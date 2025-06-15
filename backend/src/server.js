@@ -13,6 +13,8 @@ const PORT = process.env.PORT || 3000;
 // Initialize email service
 const emailService = new EmailService();
 
+app.set('trust proxy', 1 /* number of proxies between user and server */)
+
 // Security middleware
 app.use(helmet({
     contentSecurityPolicy: {
