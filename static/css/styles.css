@@ -547,6 +547,21 @@ a:hover {
     box-shadow: var(--shadow);
 }
 
+/* Captcha field styling */
+#captcha-question {
+    font-weight: 600;
+    color: var(--primary-color);
+    background: var(--light-bg);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.5rem;
+}
+
 .contact-form-container h2 {
     margin-bottom: 2rem;
 }

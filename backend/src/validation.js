@@ -67,6 +67,26 @@ const contactFormSchema = Joi.object({
         .allow('')
         .messages({
             'any.only': 'Ungültiger Newsletter-Wert'
+        }),
+    
+    captcha: Joi.number()
+        .integer()
+        .min(0)
+        .max(20)
+        .required()
+        .messages({
+            'number.base': 'Captcha-Antwort muss eine Zahl sein',
+            'number.integer': 'Captcha-Antwort muss eine ganze Zahl sein',
+            'number.min': 'Captcha-Antwort ist ungültig',
+            'number.max': 'Captcha-Antwort ist ungültig',
+            'any.required': 'Bitte beantworten Sie die Sicherheitsfrage'
+        }),
+    
+    website: Joi.string()
+        .allow('')
+        .max(0)
+        .messages({
+            'string.max': 'Spam-Schutz aktiviert'
         })
 });
 

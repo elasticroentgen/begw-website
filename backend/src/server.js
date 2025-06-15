@@ -123,6 +123,16 @@ app.post('/api/contact', async (req, res) => {
             });
         }
 
+        // Additional bot detection - check for website field
+        if (req.body.website && req.body.website.length > 0) {
+            console.warn('Website field filled (honeypot), likely spam:', req.ip);
+            return res.status(400).json({
+                success: false,
+                error: 'Spam detected',
+                code: 'SPAM_DETECTED'
+            });
+        }
+
         // Validate form data
         const validation = validateContactForm(req.body);
         if (!validation.isValid) {

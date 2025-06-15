@@ -86,6 +86,53 @@ window.addEventListener('scroll', function() {
     }
 });
 
+// Captcha functionality
+let captchaAnswer = 0;
+
+function generateCaptcha() {
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    const operators = ['+', '-'];
+    const operator = operators[Math.floor(Math.random() * operators.length)];
+    
+    let question, answer;
+    if (operator === '+') {
+        question = `${num1} + ${num2}`;
+        answer = num1 + num2;
+    } else {
+        // Ensure subtraction doesn't result in negative numbers
+        const larger = Math.max(num1, num2);
+        const smaller = Math.min(num1, num2);
+        question = `${larger} - ${smaller}`;
+        answer = larger - smaller;
+    }
+    
+    captchaAnswer = answer;
+    const questionElement = document.getElementById('captcha-question');
+    if (questionElement) {
+        questionElement.textContent = question;
+    }
+}
+
+// Initialize captcha when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    generateCaptcha();
+    
+    // Regenerate captcha if user gets it wrong
+    const captchaInput = document.getElementById('captcha');
+    if (captchaInput) {
+        captchaInput.addEventListener('blur', function() {
+            const userAnswer = parseInt(this.value);
+            if (userAnswer && userAnswer !== captchaAnswer) {
+                // Don't immediately regenerate, give them a chance to correct
+                this.setCustomValidity('Die Antwort ist nicht korrekt. Bitte versuchen Sie es erneut.');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    }
+});
+
 // Contact Form Handling
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
@@ -120,6 +167,22 @@ if (contactForm) {
             return;
         }
 
+        // Validate captcha
+        const userCaptchaAnswer = parseInt(formObject.captcha);
+        if (!userCaptchaAnswer || userCaptchaAnswer !== captchaAnswer) {
+            showAlert('Die Sicherheitsfrage wurde nicht korrekt beantwortet. Bitte versuchen Sie es erneut.', 'error');
+            generateCaptcha(); // Generate new captcha
+            document.getElementById('captcha').value = '';
+            return;
+        }
+
+        // Check honeypot (anti-spam)
+        if (formObject.website && formObject.website.length > 0) {
+            // Bot detected, fail silently or show generic error
+            showAlert('Ein technischer Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.', 'error');
+            return;
+        }
+
         // Submit form to API
         const submitButton = contactForm.querySelector('button[type="submit"]');
         const originalText = submitButton.innerHTML;
@@ -133,6 +196,7 @@ if (contactForm) {
                 if (response.success) {
                     showAlert(response.message || 'Vielen Dank für Ihre Nachricht! Wir werden uns zeitnah bei Ihnen melden.', 'success');
                     contactForm.reset();
+                    generateCaptcha(); // Generate new captcha after successful submission
                 } else {
                     throw new Error(response.error || 'Ein Fehler ist aufgetreten');
                 }

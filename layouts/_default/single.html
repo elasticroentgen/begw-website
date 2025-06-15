@@ -94,6 +94,19 @@
                         <textarea id="message" name="message" rows="6" required placeholder="Beschreiben Sie Ihr Anliegen..."></textarea>
                     </div>
 
+                    <!-- Honeypot field (hidden from users, visible to bots) -->
+                    <div class="form-group" style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+                        <label for="website">Website (leer lassen)</label>
+                        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    <!-- Simple math captcha -->
+                    <div class="form-group">
+                        <label for="captcha">Sicherheitsfrage: Was ist <span id="captcha-question"></span>? *</label>
+                        <input type="number" id="captcha" name="captcha" required placeholder="Antwort eingeben" min="0" max="20">
+                        <small style="color: #6c757d; font-size: 0.875rem;">Diese Frage dient dem Schutz vor automatisierten Anfragen.</small>
+                    </div>
+
                     <div class="form-group checkbox-group">
                         <label class="checkbox-label">
                             <input type="checkbox" id="privacy" name="privacy" required>
