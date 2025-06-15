@@ -152,7 +152,7 @@ if (contactForm) {
 async function submitToAPI(formData) {
     const apiUrl = window.location.hostname === 'localhost' 
         ? 'http://localhost:3000/api/contact'
-        : `${window.location.protocol}//${window.location.hostname}/api/contact`;
+        : `${window.location.protocol}//api.buergerenergie-westsachsen.de/api/contact`;
     
     try {
         const response = await fetch(apiUrl, {
