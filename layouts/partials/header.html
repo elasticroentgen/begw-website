@@ -23,6 +23,7 @@
                     <li><a href="{{ "/" | relURL }}" class="nav-link{{ if .IsHome }} active{{ end }}">Start</a></li>
                     <li><a href="{{ "/" | relURL }}#about" class="nav-link">Über uns</a></li>
                     <li><a href="{{ "/" | relURL }}#services" class="nav-link">Leistungen</a></li>
+                    <li><a href="{{ "satzung" | relURL }}" class="nav-link{{ if eq .Title "Satzung" }} active{{ end }}">Satzung</a></li>
                     <li><a href="{{ "kontakt" | relURL }}" class="nav-link{{ if eq .Title "Kontakt" }} active{{ end }}">Kontakt</a></li>
                     <li><a href="{{ "impressum" | relURL }}" class="nav-link{{ if eq .Title "Impressum" }} active{{ end }}">Impressum</a></li>
                 </ul>
