@@ -1,0 +1,148 @@
+<section class="page-header">
+    <div class="container">
+        <h1>{{ .Title }}</h1>
+        <p>Werden Sie Mitglied der Bürgerenergie Westsachsen eG und gestalten Sie die Energiewende aktiv mit!</p>
+    </div>
+</section>
+
+<section class="membership-section">
+    <div class="container">
+        <div class="membership-content">
+            <div class="membership-info">
+                <div class="membership-details">
+                    <div class="info-item">
+                        <h3>Einlage</h3>
+                        <p>Jedes neue Mitglied muss mindestens <strong>einen Genossanschaftsanteil zu je 250 €</strong> zeichnen.</p>
+                        <p>Sie können bis zu <strong>100 Genossenschaftsanteile</strong> (25.000 €) zeichnen.</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>Ihre Vorteile</h3>
+                        <div style="margin-left: 1rem; margin-bottom: 1rem;">
+                        <ul>
+                            <li>Mitbestimmung bei der Energiewende vor Ort</li>
+                            <li>Dividende auf Ihre Geschäftsanteile</li>
+                            <li>Nachhaltiges Investment in erneuerbare Energien</li>
+                            <li>Unterstützung der regionalen Wertschöpfung</li>
+                        </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="membership-form-container">
+                <h3>Mitgliedsantrag stellen</h3>
+                <form class="membership-form" id="membershipForm">
+                    <div class="form-group">
+                        <label for="firstname">Vorname *</label>
+                        <input type="text" id="firstname" name="firstname" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastname">Nachname *</label>
+                        <input type="text" id="lastname" name="lastname" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">E-Mail-Adresse *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="street">Straße und Hausnummer *</label>
+                        <input type="text" id="street" name="street" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="zipcode">PLZ *</label>
+                            <input type="text" id="zipcode" name="zipcode" required pattern="[0-9]{5}">
+                        </div>
+                        <div class="form-group">
+                            <label for="city">Ort *</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                    </div>
+
+                    <div class="shares-section">
+                        <h3>Genossenchaftsanteile</h3>
+                        <div class="shares-explanation">
+                            <p>Wählen Sie die Anzahl Ihrer Geschäftsanteile. Der erste Anteil (250 €) ist Pflicht, weitere Anteile sind freiwillig.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mandatory-shares">Pflichtanteil *</label>
+                            <div class="shares-input-group">
+                                <input type="number" id="mandatory-shares" name="mandatory-shares" value="1" min="1" max="1" readonly>
+                                <span class="shares-price">= 250,00 €</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="voluntary-shares">Zusätzliche freiwillige Anteile</label>
+                            <div class="shares-input-group">
+                                <input type="number" id="voluntary-shares" name="voluntary-shares" value="0" min="0" max="99">
+                                <span class="shares-price" id="voluntary-price">= 0,00 €</span>
+                            </div>
+                            <small>Maximal 99 zusätzliche Anteile möglich</small>
+                        </div>
+
+                        <div class="total-calculation">
+                            <div class="calculation-row">
+                                <span>Pflichtanteil:</span>
+                                <span id="mandatory-total">250,00 €</span>
+                            </div>
+                            <div class="calculation-row">
+                                <span>Freiwillige Anteile:</span>
+                                <span id="voluntary-total">0,00 €</span>
+                            </div>
+                            <div class="calculation-row total">
+                                <strong>
+                                    <span>Gesamteinlage:</span>
+                                    <span id="total-amount">250,00 €</span>
+                                </strong>
+                            </div>
+                            <div class="calculation-row">
+                                <span>Anzahl Geschäftsanteile gesamt:</span>
+                                <span id="total-shares">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Honeypot field (hidden from users, visible to bots) -->
+                    <div class="form-group" style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+                        <label for="website">Website (leer lassen)</label>
+                        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    <!-- Simple math captcha -->
+                    <div class="form-group">
+                        <label for="captcha">Sicherheitsfrage: Was ist <span id="captcha-question"></span>? *</label>
+                        <input type="number" id="captcha" name="captcha" required placeholder="Antwort eingeben" min="0" max="20">
+                        <small style="color: #6c757d; font-size: 0.875rem;">Diese Frage dient dem Schutz vor automatisierten Anfragen.</small>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="privacy" name="privacy" required>
+                            <span class="checkmark"></span>
+                            Ich habe die <a href="{{ "impressum" | relURL }}#datenschutz">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu. *
+                        </label>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <span class="checkmark"></span>
+                            Ich habe die <a href="{{ "satzung" | relURL }}">Satzung</a> der Bürgerenergie Westsachsen eG gelesen und erkläre hiermit meinen Beitritt zur Genossenschaft. *
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-user-plus"></i>
+                        Mitgliedsantrag senden
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

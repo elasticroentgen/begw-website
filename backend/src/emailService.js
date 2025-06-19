@@ -155,6 +155,117 @@ class EmailService {
         return text;
     }
 
+    async sendMembershipEmail(formData) {
+        try {
+            // Verify transporter configuration
+            await this.transporter.verify();
+            
+            const template = await this.loadMembershipTemplate();
+            const htmlContent = this.replaceMembershipTemplateVariables(template, formData);
+            
+            const mailOptions = {
+                from: {
+                    name: 'BEGW Mitgliedsantrag',
+                    address: process.env.MAIL_FROM
+                },
+                to: process.env.MAIL_TO,
+                replyTo: formData.email,
+                subject: `Neuer Mitgliedsantrag - ${formData.firstname} ${formData.lastname}`,
+                html: htmlContent,
+                text: this.generateMembershipPlainTextEmail(formData)
+            };
+
+            const result = await this.transporter.sendMail(mailOptions);
+            console.log('Membership email sent successfully:', result.messageId);
+            return { success: true, messageId: result.messageId };
+            
+        } catch (error) {
+            console.error('Error sending membership email:', error);
+            throw new Error(`Failed to send membership email: ${error.message}`);
+        }
+    }
+
+    async loadMembershipTemplate() {
+        try {
+            const templatePath = path.join(__dirname, '../templates/membership-template.html');
+            return await fs.readFile(templatePath, 'utf-8');
+        } catch (error) {
+            console.error('Error loading membership template:', error);
+            throw new Error('Failed to load membership email template');
+        }
+    }
+
+    replaceMembershipTemplateVariables(template, data) {
+        let html = template;
+        
+        // Basic personal information
+        html = html.replace(/\{\{firstname\}\}/g, data.firstname || '');
+        html = html.replace(/\{\{lastname\}\}/g, data.lastname || '');
+        html = html.replace(/\{\{email\}\}/g, data.email || '');
+        html = html.replace(/\{\{street\}\}/g, data.street || '');
+        html = html.replace(/\{\{zipcode\}\}/g, data.zipcode || '');
+        html = html.replace(/\{\{city\}\}/g, data.city || '');
+        
+        // Shares information
+        html = html.replace(/\{\{mandatoryShares\}\}/g, data.mandatoryShares || 1);
+        html = html.replace(/\{\{voluntaryShares\}\}/g, data['voluntary-shares'] || 0);
+        html = html.replace(/\{\{totalShares\}\}/g, data.totalShares || 1);
+        html = html.replace(/\{\{totalAmount\}\}/g, (data.totalAmount || 250).toLocaleString('de-DE', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+        html = html.replace(/\{\{mandatoryAmount\}\}/g, '250,00');
+        html = html.replace(/\{\{voluntaryAmount\}\}/g, ((data['voluntary-shares'] || 0) * 250).toLocaleString('de-DE', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+
+        // Timestamp
+        html = html.replace(/\{\{timestamp\}\}/g, new Date().toLocaleString('de-DE', {
+            timeZone: 'Europe/Berlin',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        }));
+
+        return html;
+    }
+
+    generateMembershipPlainTextEmail(data) {
+        const timestamp = new Date().toLocaleString('de-DE', {
+            timeZone: 'Europe/Berlin',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        let text = `NEUER MITGLIEDSANTRAG - BEGW\n\n`;
+        text += `PERSÖNLICHE DATEN:\n`;
+        text += `Name: ${data.firstname} ${data.lastname}\n`;
+        text += `E-Mail: ${data.email}\n`;
+        text += `Adresse: ${data.street}\n`;
+        text += `         ${data.zipcode} ${data.city}\n\n`;
+        
+        text += `GESCHÄFTSANTEILE:\n`;
+        text += `Pflichtanteil: ${data.mandatoryShares} × 250,00 € = 250,00 €\n`;
+        text += `Freiwillige Anteile: ${data['voluntary-shares'] || 0} × 250,00 € = ${((data['voluntary-shares'] || 0) * 250).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €\n`;
+        text += `Gesamt: ${data.totalShares} Anteile = ${(data.totalAmount || 250).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €\n\n`;
+        
+        text += `Eingegangen am: ${timestamp}\n\n`;
+        text += `RECHTLICHE BESTÄTIGUNGEN:\n`;
+        text += `✓ Datenschutzerklärung akzeptiert\n`;
+        text += `✓ Satzung gelesen und Beitritt zur Genossenschaft erklärt\n\n`;
+        text += `---\n`;
+        text += `Diese E-Mail wurde automatisch über das Mitgliedsantragsformular der BEGW-Website generiert.\n`;
+        text += `Bürgerenergie Genossenschaft Westsachsen eG`;
+
+        return text;
+    }
+
     async testConnection() {
         try {
             await this.transporter.verify();

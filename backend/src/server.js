@@ -5,7 +5,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
 const EmailService = require('./emailService');
-const { validateContactForm, validateHoneypot, detectSpam } = require('./validation');
+const { validateContactForm, validateMembershipForm, validateHoneypot, detectSpam } = require('./validation');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -179,6 +179,81 @@ app.post('/api/contact', async (req, res) => {
     }
 });
 
+// Membership form submission endpoint
+app.post('/api/membership', async (req, res) => {
+    try {
+        console.log('Membership form submission received:', {
+            ip: req.ip,
+            userAgent: req.get('User-Agent'),
+            timestamp: new Date().toISOString()
+        });
+
+        // Validate honeypot (anti-spam)
+        if (!validateHoneypot(req.body)) {
+            console.warn('Honeypot triggered, likely spam:', req.ip);
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid request',
+                code: 'INVALID_REQUEST'
+            });
+        }
+
+        // Additional bot detection - check for website field
+        if (req.body.website && req.body.website.length > 0) {
+            console.warn('Website field filled (honeypot), likely spam:', req.ip);
+            return res.status(400).json({
+                success: false,
+                error: 'Spam detected',
+                code: 'SPAM_DETECTED'
+            });
+        }
+
+        // Validate form data
+        const validation = validateMembershipForm(req.body);
+        if (!validation.isValid) {
+            console.warn('Membership validation failed:', validation.errors);
+            return res.status(400).json({
+                success: false,
+                error: 'Validierungsfehler',
+                details: validation.errors,
+                code: 'VALIDATION_ERROR'
+            });
+        }
+
+        // Spam detection (adapted for membership data)
+        if (detectSpam({ message: `${validation.data.firstname} ${validation.data.lastname}` })) {
+            console.warn('Spam detected in membership:', req.ip, validation.data.firstname, validation.data.lastname);
+            return res.status(400).json({
+                success: false,
+                error: 'Ihr Antrag konnte nicht versendet werden. Bitte überprüfen Sie Ihre Angaben.',
+                code: 'SPAM_DETECTED'
+            });
+        }
+
+        // Send email
+        console.log('Sending membership email for:', validation.data.firstname, validation.data.lastname, validation.data.email);
+        const result = await emailService.sendMembershipEmail(validation.data);
+
+        console.log('Membership email sent successfully:', result.messageId);
+        
+        res.json({
+            success: true,
+            message: 'Vielen Dank für Ihren Mitgliedsantrag! Wir werden uns zeitnah bei Ihnen melden.',
+            messageId: result.messageId
+        });
+
+    } catch (error) {
+        console.error('Error processing membership form:', error);
+        
+        // Don't expose internal errors to client
+        res.status(500).json({
+            success: false,
+            error: 'Ein technischer Fehler ist aufgetreten. Bitte versuchen Sie es später erneut oder kontaktieren Sie uns direkt.',
+            code: 'INTERNAL_ERROR'
+        });
+    }
+});
+
 // API documentation endpoint
 app.get('/api', (req, res) => {
     res.json({
@@ -186,6 +261,7 @@ app.get('/api', (req, res) => {
         version: '1.0.0',
         endpoints: {
             'POST /api/contact': 'Submit contact form',
+            'POST /api/membership': 'Submit membership application',
             'GET /health': 'Health check',
             'GET /api': 'API documentation'
         },

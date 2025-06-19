@@ -558,3 +558,200 @@ loadingStyles.textContent = `
     }
 `;
 document.head.appendChild(loadingStyles);
+
+// Membership Form Handling
+const membershipForm = document.getElementById('membershipForm');
+if (membershipForm) {
+    // Initialize shares calculation
+    const voluntarySharesInput = document.getElementById('voluntary-shares');
+    const voluntaryPriceSpan = document.getElementById('voluntary-price');
+    const voluntaryTotalSpan = document.getElementById('voluntary-total');
+    const totalAmountSpan = document.getElementById('total-amount');
+    const totalSharesSpan = document.getElementById('total-shares');
+    
+    // Calculate and update shares display
+    function updateSharesCalculation() {
+        const mandatoryShares = 1;
+        const mandatoryAmount = mandatoryShares * 250;
+        const voluntaryShares = parseInt(voluntarySharesInput.value) || 0;
+        const voluntaryAmount = voluntaryShares * 250;
+        const totalShares = mandatoryShares + voluntaryShares;
+        const totalAmount = mandatoryAmount + voluntaryAmount;
+        
+        // Update display
+        voluntaryPriceSpan.textContent = `= ${voluntaryAmount.toLocaleString('de-DE', { 
+            minimumFractionDigits: 2, 
+            maximumFractionDigits: 2 
+        })} €`;
+        
+        voluntaryTotalSpan.textContent = `${voluntaryAmount.toLocaleString('de-DE', { 
+            minimumFractionDigits: 2, 
+            maximumFractionDigits: 2 
+        })} €`;
+        
+        totalAmountSpan.textContent = `${totalAmount.toLocaleString('de-DE', { 
+            minimumFractionDigits: 2, 
+            maximumFractionDigits: 2 
+        })} €`;
+        
+        totalSharesSpan.textContent = totalShares.toString();
+    }
+    
+    // Listen for changes to voluntary shares input
+    voluntarySharesInput.addEventListener('input', updateSharesCalculation);
+    voluntarySharesInput.addEventListener('change', updateSharesCalculation);
+    
+    // Form submission handling
+    membershipForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = new FormData(membershipForm);
+        const formObject = {};
+        formData.forEach((value, key) => {
+            formObject[key] = value;
+        });
+        
+        // Validate required fields
+        const requiredFields = ['firstname', 'lastname', 'email', 'street', 'zipcode', 'city'];
+        const emptyFields = requiredFields.filter(field => !formObject[field]);
+        
+        if (emptyFields.length > 0) {
+            showAlert('Bitte füllen Sie alle Pflichtfelder aus.', 'error');
+            return;
+        }
+        
+        // Validate email
+        if (!isValidEmail(formObject.email)) {
+            showAlert('Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'error');
+            return;
+        }
+        
+        // Validate ZIP code
+        if (!/^[0-9]{5}$/.test(formObject.zipcode)) {
+            showAlert('Bitte geben Sie eine gültige 5-stellige Postleitzahl ein.', 'error');
+            return;
+        }
+        
+        // Validate shares
+        const voluntaryShares = parseInt(formObject['voluntary-shares']) || 0;
+        if (voluntaryShares < 0 || voluntaryShares > 99) {
+            showAlert('Die Anzahl der freiwilligen Anteile muss zwischen 0 und 99 liegen.', 'error');
+            return;
+        }
+        
+        // Check required checkboxes
+        if (!formObject.privacy) {
+            showAlert('Bitte stimmen Sie der Datenschutzerklärung zu.', 'error');
+            return;
+        }
+        
+        if (!formObject.terms) {
+            showAlert('Bitte bestätigen Sie, dass Sie die Satzung gelesen haben und der Genossenschaft beitreten möchten.', 'error');
+            return;
+        }
+        
+        // Validate captcha
+        const userCaptchaAnswer = parseInt(formObject.captcha);
+        if (!userCaptchaAnswer || userCaptchaAnswer !== captchaAnswer) {
+            showAlert('Die Sicherheitsfrage wurde nicht korrekt beantwortet. Bitte versuchen Sie es erneut.', 'error');
+            generateCaptcha(); // Generate new captcha
+            document.getElementById('captcha').value = '';
+            return;
+        }
+        
+        // Check honeypot (anti-spam)
+        if (formObject.website && formObject.website.length > 0) {
+            // Bot detected, fail silently or show generic error
+            showAlert('Ein technischer Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.', 'error');
+            return;
+        }
+        
+        // Calculate totals for submission
+        const mandatoryShares = 1;
+        const totalShares = mandatoryShares + voluntaryShares;
+        const totalAmount = totalShares * 250;
+        
+        // Add calculated values to form data
+        formObject.mandatoryShares = mandatoryShares;
+        formObject.totalShares = totalShares;
+        formObject.totalAmount = totalAmount;
+        formObject.formType = 'membership';
+        
+        // Submit form to API
+        const submitButton = membershipForm.querySelector('button[type="submit"]');
+        const originalText = submitButton.innerHTML;
+        
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird gesendet...';
+        submitButton.disabled = true;
+        
+        // Send to API
+        submitMembershipToAPI(formObject)
+            .then(response => {
+                if (response.success) {
+                    showAlert(response.message || 'Vielen Dank für Ihren Mitgliedsantrag! Wir werden uns zeitnah bei Ihnen melden.', 'success');
+                    membershipForm.reset();
+                    updateSharesCalculation(); // Reset calculation display
+                    generateCaptcha(); // Generate new captcha after successful submission
+                } else {
+                    throw new Error(response.error || 'Ein Fehler ist aufgetreten');
+                }
+            })
+            .catch(error => {
+                console.error('Membership form submission error:', error);
+                showAlert(error.message || 'Ein technischer Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.', 'error');
+            })
+            .finally(() => {
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+            });
+    });
+}
+
+// Membership API submission function
+async function submitMembershipToAPI(formData) {
+    const apiUrl = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000/api/membership'
+        : `${window.location.protocol}//api.buergerenergie-westsachsen.de/api/membership`;
+    
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        // Handle response
+        const data = await response.json();
+        
+        if (!response.ok) {
+            // Handle validation errors
+            if (response.status === 400 && data.details) {
+                const errorMessages = Object.values(data.details).join('\n');
+                throw new Error(errorMessages);
+            }
+            
+            // Handle rate limiting
+            if (response.status === 429) {
+                throw new Error(data.error || 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.');
+            }
+            
+            // Handle other errors
+            throw new Error(data.error || `Server-Fehler: ${response.status}`);
+        }
+        
+        return data;
+        
+    } catch (error) {
+        // Handle network errors
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            throw new Error('Verbindungsfehler. Bitte überprüfen Sie Ihre Internetverbindung.');
+        }
+        
+        // Re-throw other errors
+        throw error;
+    }
+}

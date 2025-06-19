@@ -192,6 +192,9 @@
 {{ else if eq .Title "Satzung"}}
 {{ partial "satzung.html" . }}
 
+{{ else if eq .Title "Mitgliedsantrag" }}
+{{ partial "mitgliedsantrag.html" . }}
+
 
 {{ else }}
 

@@ -980,3 +980,182 @@ a:focus {
         padding: 0;
     }
 }
+
+/* Membership Form Styles */
+.membership-section {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.membership-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.membership-info {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    height: fit-content;
+}
+
+.membership-info h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.info-item {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.info-item h3 {
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.info-item p {
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.info-item ul {
+    list-style: none;
+    padding: 0;
+}
+
+.info-item ul li {
+    padding: 0.5rem 0;
+    color: var(--text-light);
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.info-item ul li::before {
+    content: "✓";
+    color: var(--primary-color);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.membership-form-container {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.membership-form-container h2 {
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+}
+
+.shares-section {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+    margin: 2rem 0;
+}
+
+.shares-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.shares-explanation {
+    margin-bottom: 1.5rem;
+}
+
+.shares-explanation p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.shares-input-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.shares-input-group input {
+    flex: 0 0 120px;
+}
+
+.shares-price {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.total-calculation {
+    background: #e8f5e8;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+}
+
+.calculation-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #d4edda;
+}
+
+.calculation-row:last-child {
+    border-bottom: none;
+}
+
+.calculation-row.total {
+    border-top: 2px solid var(--primary-color);
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+/* Mobile responsiveness for membership form */
+@media (max-width: 768px) {
+    .membership-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .shares-input-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .shares-input-group input {
+        flex: none;
+        width: 100%;
+    }
+    
+    .calculation-row {
+        font-size: 0.9rem;
+    }
+}

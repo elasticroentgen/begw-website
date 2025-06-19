@@ -90,8 +90,187 @@ const contactFormSchema = Joi.object({
         })
 });
 
+const membershipFormSchema = Joi.object({
+    firstname: Joi.string()
+        .min(2)
+        .max(100)
+        .required()
+        .messages({
+            'string.base': 'Vorname muss ein Text sein',
+            'string.empty': 'Vorname ist erforderlich',
+            'string.min': 'Vorname muss mindestens 2 Zeichen lang sein',
+            'string.max': 'Vorname darf maximal 100 Zeichen lang sein',
+            'any.required': 'Vorname ist erforderlich'
+        }),
+    
+    lastname: Joi.string()
+        .min(2)
+        .max(100)
+        .required()
+        .messages({
+            'string.base': 'Nachname muss ein Text sein',
+            'string.empty': 'Nachname ist erforderlich',
+            'string.min': 'Nachname muss mindestens 2 Zeichen lang sein',
+            'string.max': 'Nachname darf maximal 100 Zeichen lang sein',
+            'any.required': 'Nachname ist erforderlich'
+        }),
+    
+    email: Joi.string()
+        .email()
+        .required()
+        .messages({
+            'string.base': 'E-Mail muss ein Text sein',
+            'string.empty': 'E-Mail-Adresse ist erforderlich',
+            'string.email': 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
+            'any.required': 'E-Mail-Adresse ist erforderlich'
+        }),
+    
+    street: Joi.string()
+        .min(5)
+        .max(200)
+        .required()
+        .messages({
+            'string.base': 'Straße muss ein Text sein',
+            'string.empty': 'Straße und Hausnummer sind erforderlich',
+            'string.min': 'Straße muss mindestens 5 Zeichen lang sein',
+            'string.max': 'Straße darf maximal 200 Zeichen lang sein',
+            'any.required': 'Straße und Hausnummer sind erforderlich'
+        }),
+    
+    zipcode: Joi.string()
+        .pattern(/^[0-9]{5}$/)
+        .required()
+        .messages({
+            'string.pattern.base': 'PLZ muss 5-stellig sein',
+            'string.empty': 'Postleitzahl ist erforderlich',
+            'any.required': 'Postleitzahl ist erforderlich'
+        }),
+    
+    city: Joi.string()
+        .min(2)
+        .max(100)
+        .required()
+        .messages({
+            'string.base': 'Ort muss ein Text sein',
+            'string.empty': 'Ort ist erforderlich',
+            'string.min': 'Ort muss mindestens 2 Zeichen lang sein',
+            'string.max': 'Ort darf maximal 100 Zeichen lang sein',
+            'any.required': 'Ort ist erforderlich'
+        }),
+    
+    'mandatory-shares': Joi.number()
+        .integer()
+        .min(1)
+        .max(1)
+        .required()
+        .messages({
+            'number.base': 'Pflichtanteil muss eine Zahl sein',
+            'number.integer': 'Pflichtanteil muss eine ganze Zahl sein',
+            'number.min': 'Mindestens ein Pflichtanteil erforderlich',
+            'number.max': 'Nur ein Pflichtanteil erlaubt',
+            'any.required': 'Pflichtanteil ist erforderlich'
+        }),
+    
+    'voluntary-shares': Joi.number()
+        .integer()
+        .min(0)
+        .max(99)
+        .required()
+        .messages({
+            'number.base': 'Freiwillige Anteile müssen eine Zahl sein',
+            'number.integer': 'Freiwillige Anteile müssen eine ganze Zahl sein',
+            'number.min': 'Freiwillige Anteile können nicht negativ sein',
+            'number.max': 'Maximal 99 freiwillige Anteile erlaubt',
+            'any.required': 'Anzahl freiwilliger Anteile ist erforderlich'
+        }),
+    
+    mandatoryShares: Joi.number()
+        .integer()
+        .min(1)
+        .max(1)
+        .required(),
+    
+    totalShares: Joi.number()
+        .integer()
+        .min(1)
+        .max(100)
+        .required(),
+    
+    totalAmount: Joi.number()
+        .integer()
+        .min(250)
+        .max(25000)
+        .required(),
+    
+    formType: Joi.string()
+        .valid('membership')
+        .required(),
+    
+    privacy: Joi.string()
+        .valid('on')
+        .required()
+        .messages({
+            'any.only': 'Sie müssen der Datenschutzerklärung zustimmen',
+            'any.required': 'Sie müssen der Datenschutzerklärung zustimmen'
+        }),
+    
+    terms: Joi.string()
+        .valid('on')
+        .required()
+        .messages({
+            'any.only': 'Sie müssen die Satzung akzeptieren und dem Beitritt zur Genossenschaft zustimmen',
+            'any.required': 'Sie müssen die Satzung akzeptieren und dem Beitritt zur Genossenschaft zustimmen'
+        }),
+    
+    captcha: Joi.number()
+        .integer()
+        .min(0)
+        .max(20)
+        .required()
+        .messages({
+            'number.base': 'Captcha-Antwort muss eine Zahl sein',
+            'number.integer': 'Captcha-Antwort muss eine ganze Zahl sein',
+            'number.min': 'Captcha-Antwort ist ungültig',
+            'number.max': 'Captcha-Antwort ist ungültig',
+            'any.required': 'Bitte beantworten Sie die Sicherheitsfrage'
+        }),
+    
+    website: Joi.string()
+        .allow('')
+        .max(0)
+        .messages({
+            'string.max': 'Spam-Schutz aktiviert'
+        })
+});
+
 function validateContactForm(data) {
     const { error, value } = contactFormSchema.validate(data, {
+        abortEarly: false,
+        stripUnknown: true
+    });
+    
+    if (error) {
+        const errors = error.details.reduce((acc, detail) => {
+            acc[detail.path[0]] = detail.message;
+            return acc;
+        }, {});
+        
+        return {
+            isValid: false,
+            errors,
+            data: null
+        };
+    }
+    
+    return {
+        isValid: true,
+        errors: null,
+        data: value
+    };
+}
+
+function validateMembershipForm(data) {
+    const { error, value } = membershipFormSchema.validate(data, {
         abortEarly: false,
         stripUnknown: true
     });
@@ -174,6 +353,7 @@ function detectSpam(data) {
 
 module.exports = {
     validateContactForm,
+    validateMembershipForm,
     validateRateLimit,
     validateHoneypot,
     detectSpam
