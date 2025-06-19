@@ -4,9 +4,4 @@ Dockerfile
 .gitignore
 README.md
 .github
-# Old static files (now in Hugo structure)
-index.html
-kontakt.html
-impressum.html
-styles.css
-script.js
+public/
