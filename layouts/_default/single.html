@@ -189,5 +189,22 @@
         </div>
     </div>
 </section>
+{{ else if eq .Title "Satzung"}}
+{{ partial "satzung.html" . }}
+
+
+{{ else }}
+
+<section class="page-header">
+    <div class="container">
+        <h1>{{ .Title }}</h1>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container">
+      {{ .Content }}
+    </div>
+</section>
 {{ end }}
 {{ end }}
