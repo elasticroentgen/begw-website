@@ -62,11 +62,20 @@
                             <input type="text" id="city" name="city" required>
                         </div>
                     </div>
+                    
+                    <h3>Kompetenzen (optional)</h3>
+                    <p>Die Genossenschaft lebt von ihren Mitgliedern und ihren Fähigkeiten. Wenn Sie sich mehr als nur finanziell beteiligen wollen, können Sie uns mit ein paar Stichpunkten gern Ihre Kompetenzen mitteilen.</p>
+                    <p>zb: Marketing, Buchhaltung, Netzwerke, etc.</p>
+
+                    <div class="form-group">
+                        <label for="abilities">Meine Kompetenzen</label>
+                        <input type="text" id="abilities" name="abilities">
+                    </div>
 
                     <div class="shares-section">
                         <h3>Genossenchaftsanteile</h3>
                         <div class="shares-explanation">
-                            <p>Wählen Sie die Anzahl Ihrer Geschäftsanteile. Der erste Anteil (250 €) ist Pflicht, weitere Anteile sind freiwillig.</p>
+                            <p>Wählen Sie die Anzahl Ihrer Genossenschaftsanteile. Der erste Anteil (250 €) ist Pflicht, weitere Anteile sind freiwillig.</p>
                         </div>
 
                         <div class="form-group">
@@ -102,7 +111,7 @@
                                 </strong>
                             </div>
                             <div class="calculation-row">
-                                <span>Anzahl Geschäftsanteile gesamt:</span>
+                                <span>Anzahl Genossenschaftsanteile gesamt:</span>
                                 <span id="total-shares">1</span>
                             </div>
                         </div>
@@ -133,14 +142,22 @@
                         <label class="checkbox-label">
                             <input type="checkbox" id="terms" name="terms" required>
                             <span class="checkmark"></span>
-                            Ich habe die <a href="{{ "satzung" | relURL }}">Satzung</a> der Bürgerenergie Westsachsen eG gelesen und erkläre hiermit meinen Beitritt zur Genossenschaft. *
+                            Ich habe die <a href="{{ "satzung" | relURL }}">Satzung</a> der Bürgerenergie Westsachsen eG gelesen und stimme meinen Rechten und Pflichten zu. *
                         </label>
+                    </div>
+
+                    
+                    <div class="warning-notice" style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+                        <p style="margin: 0; color: #856404;"><strong>Hinweis:</strong> Die Bürgerenergie Westsachsen eG befindet sich derzeit noch in Gründung. Neue Mitgiledsanträge kommen daher auf eine Warteliste.</p>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-large">
                         <i class="fas fa-user-plus"></i>
-                        Mitgliedsantrag senden
+                        Mitgliedsantrag absenden
                     </button>
+                    <p>
+                    * Erforderliche Angaben
+                    </P>
                 </form>
             </div>
         </div>

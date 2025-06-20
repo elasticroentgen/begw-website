@@ -150,7 +150,7 @@ class EmailService {
         text += `Eingegangen am: ${timestamp}\n\n`;
         text += `---\n`;
         text += `Diese E-Mail wurde automatisch über das Kontaktformular der BEGW-Website generiert.\n`;
-        text += `Bürgerenergie Genossenschaft Westsachsen eG`;
+        text += `Bürgerenergie Westsachsen eG`;
 
         return text;
     }
@@ -258,10 +258,10 @@ class EmailService {
         text += `Eingegangen am: ${timestamp}\n\n`;
         text += `RECHTLICHE BESTÄTIGUNGEN:\n`;
         text += `✓ Datenschutzerklärung akzeptiert\n`;
-        text += `✓ Satzung gelesen und Beitritt zur Genossenschaft erklärt\n\n`;
+        text += `✓ Satzung gelesen\n\n`;
         text += `---\n`;
         text += `Diese E-Mail wurde automatisch über das Mitgliedsantragsformular der BEGW-Website generiert.\n`;
-        text += `Bürgerenergie Genossenschaft Westsachsen eG`;
+        text += `Bürgerenergie Westsachsen eG`;
 
         return text;
     }
