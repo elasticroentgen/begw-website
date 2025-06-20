@@ -157,6 +157,15 @@ const membershipFormSchema = Joi.object({
             'string.max': 'Ort darf maximal 100 Zeichen lang sein',
             'any.required': 'Ort ist erforderlich'
         }),
+
+    abilities: Joi.string()
+        .min(2)
+        .max(100)
+        .messages({
+            'string.base': 'Kompetenzen muss ein Text sein',
+            'string.min': 'Kompetenzen muss mindestens 2 Zeichen lang sein',
+            'string.max': 'Kompetenzen darf maximal 100 Zeichen lang sein'
+        }),
     
     'mandatory-shares': Joi.number()
         .integer()
