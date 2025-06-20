@@ -205,6 +205,7 @@ class EmailService {
         html = html.replace(/\{\{street\}\}/g, data.street || '');
         html = html.replace(/\{\{zipcode\}\}/g, data.zipcode || '');
         html = html.replace(/\{\{city\}\}/g, data.city || '');
+        html = html.replace(/\{\{abilities\}\}/g, data.abilities || '');
         
         // Shares information
         html = html.replace(/\{\{mandatoryShares\}\}/g, data.mandatoryShares || 1);
@@ -249,6 +250,7 @@ class EmailService {
         text += `E-Mail: ${data.email}\n`;
         text += `Adresse: ${data.street}\n`;
         text += `         ${data.zipcode} ${data.city}\n\n`;
+        text += `Kompetenzen: ${data.abilities}\n`;
         
         text += `GESCHÄFTSANTEILE:\n`;
         text += `Pflichtanteil: ${data.mandatoryShares} × 250,00 € = 250,00 €\n`;
