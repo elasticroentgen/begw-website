@@ -82,3 +82,28 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    needs: [frontend, backend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    steps:
+    - name: Configure SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/deploy_key
+        chmod 600 ~/.ssh/deploy_key
+        ssh-keyscan -H 144.91.102.71 >> ~/.ssh/known_hosts
+    
+    - name: Deploy to server
+      run: |
+        ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes devops@144.91.102.71 << 'EOF'
+          cd /data/website
+          sudo docker compose pull
+          sudo docker compose up -d
+        EOF
+    
+    - name: Clean up SSH key
+      if: always()
+      run: rm -f ~/.ssh/deploy_key
