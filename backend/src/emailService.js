@@ -105,7 +105,7 @@ class EmailService {
             
             const mailOptions = {
                 from: {
-                    name: 'BEGW Kontaktformular',
+                    name: 'BEW Kontaktformular',
                     address: process.env.MAIL_FROM
                 },
                 to: process.env.MAIL_TO,
@@ -136,7 +136,7 @@ class EmailService {
             minute: '2-digit'
         });
 
-        let text = `NEUE KONTAKTANFRAGE - BEGW\n\n`;
+        let text = `NEUE KONTAKTANFRAGE - BEW\n\n`;
         text += `Name: ${data.name}\n`;
         text += `E-Mail: ${data.email}\n`;
         if (data.phone) {
@@ -149,7 +149,7 @@ class EmailService {
         }
         text += `Eingegangen am: ${timestamp}\n\n`;
         text += `---\n`;
-        text += `Diese E-Mail wurde automatisch über das Kontaktformular der BEGW-Website generiert.\n`;
+        text += `Diese E-Mail wurde automatisch über das Kontaktformular der BEW-Website generiert.\n`;
         text += `Bürgerenergie Westsachsen eG`;
 
         return text;
@@ -165,7 +165,7 @@ class EmailService {
             
             const mailOptions = {
                 from: {
-                    name: 'BEGW Mitgliedsantrag',
+                    name: 'BEW Mitgliedsantrag',
                     address: process.env.MAIL_FROM
                 },
                 to: process.env.MAIL_TO,
@@ -202,6 +202,8 @@ class EmailService {
         html = html.replace(/\{\{firstname\}\}/g, data.firstname || '');
         html = html.replace(/\{\{lastname\}\}/g, data.lastname || '');
         html = html.replace(/\{\{email\}\}/g, data.email || '');
+        html = html.replace(/\{\{phone\}\}/g, data.phone || '');
+        html = html.replace(/\{\{birthdate\}\}/g, data.birthdate || '');
         html = html.replace(/\{\{street\}\}/g, data.street || '');
         html = html.replace(/\{\{zipcode\}\}/g, data.zipcode || '');
         html = html.replace(/\{\{city\}\}/g, data.city || '');
@@ -244,7 +246,7 @@ class EmailService {
             minute: '2-digit'
         });
 
-        let text = `NEUER MITGLIEDSANTRAG - BEGW\n\n`;
+        let text = `NEUER MITGLIEDSANTRAG - BEW\n\n`;
         text += `PERSÖNLICHE DATEN:\n`;
         text += `Name: ${data.firstname} ${data.lastname}\n`;
         text += `E-Mail: ${data.email}\n`;
@@ -262,7 +264,7 @@ class EmailService {
         text += `✓ Datenschutzerklärung akzeptiert\n`;
         text += `✓ Satzung gelesen\n\n`;
         text += `---\n`;
-        text += `Diese E-Mail wurde automatisch über das Mitgliedsantragsformular der BEGW-Website generiert.\n`;
+        text += `Diese E-Mail wurde automatisch über das Mitgliedsantragsformular der BEW-Website generiert.\n`;
         text += `Bürgerenergie Westsachsen eG`;
 
         return text;

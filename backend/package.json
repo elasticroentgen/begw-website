@@ -1,7 +1,7 @@
 {
   "name": "begw-contact-api",
   "version": "1.0.0",
-  "description": "Contact form API for BEGW website",
+  "description": "Contact form API for BEW website",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

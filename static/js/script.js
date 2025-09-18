@@ -613,7 +613,7 @@ if (membershipForm) {
         });
         
         // Validate required fields
-        const requiredFields = ['firstname', 'lastname', 'email', 'street', 'zipcode', 'city'];
+        const requiredFields = ['firstname', 'lastname','birthdate', 'email', 'street', 'zipcode', 'city'];
         const emptyFields = requiredFields.filter(field => !formObject[field]);
         
         if (emptyFields.length > 0) {
