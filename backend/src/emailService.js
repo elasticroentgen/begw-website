@@ -249,6 +249,7 @@ class EmailService {
         let text = `NEUER MITGLIEDSANTRAG - BEW\n\n`;
         text += `PERSÖNLICHE DATEN:\n`;
         text += `Name: ${data.firstname} ${data.lastname}\n`;
+        text += `Geburtsdatum: ${data.birthdate}\n`;
         text += `E-Mail: ${data.email}\n`;
         text += `Adresse: ${data.street}\n`;
         text += `         ${data.zipcode} ${data.city}\n\n`;
