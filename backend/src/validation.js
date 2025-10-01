@@ -123,6 +123,7 @@ const membershipFormSchema = Joi.object({
             'string.empty': 'Geburtsdatum ist erforderlich',
             'any.required': 'Geburtsdatum ist erforderlich'
         }),
+
     email: Joi.string()
         .email()
         .required()
@@ -131,6 +132,17 @@ const membershipFormSchema = Joi.object({
             'string.empty': 'E-Mail-Adresse ist erforderlich',
             'string.email': 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
             'any.required': 'E-Mail-Adresse ist erforderlich'
+        }),
+
+    phone: Joi.string()
+        .pattern(/^[\d\s\+\-\(\)\/]+$/)
+        .min(6)
+        .max(30)
+        .allow('')
+        .messages({
+            'string.pattern.base': 'Telefonnummer enthält ungültige Zeichen',
+            'string.min': 'Telefonnummer muss mindestens 6 Zeichen lang sein',
+            'string.max': 'Telefonnummer darf maximal 30 Zeichen lang sein'
         }),
     
     street: Joi.string()
@@ -167,6 +179,7 @@ const membershipFormSchema = Joi.object({
         }),
 
     abilities: Joi.string()
+        .allow('')
         .max(100)
         .messages({
             'string.base': 'Kompetenzen muss ein Text sein',

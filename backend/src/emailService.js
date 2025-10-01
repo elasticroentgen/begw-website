@@ -251,9 +251,12 @@ class EmailService {
         text += `Name: ${data.firstname} ${data.lastname}\n`;
         text += `Geburtsdatum: ${data.birthdate}\n`;
         text += `E-Mail: ${data.email}\n`;
+        if (data.phone) {
+            text += `Telefon: ${data.phone}\n`;
+        }
         text += `Adresse: ${data.street}\n`;
         text += `         ${data.zipcode} ${data.city}\n\n`;
-        text += `Kompetenzen: ${data.abilities}\n`;
+        text += `Kompetenzen: ${data.abilities || 'Keine Angabe'}\n\n`;
         
         text += `GESCHÄFTSANTEILE:\n`;
         text += `Pflichtanteil: ${data.mandatoryShares} × 250,00 € = 250,00 €\n`;
