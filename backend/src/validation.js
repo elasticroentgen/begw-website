@@ -115,6 +115,14 @@ const membershipFormSchema = Joi.object({
             'any.required': 'Nachname ist erforderlich'
         }),
     
+    birthdate: Joi.string()
+        .min(2)
+        .max(40)
+        .required()
+        .messages({
+            'string.empty': 'Geburtsdatum ist erforderlich',
+            'any.required': 'Geburtsdatum ist erforderlich'
+        }),
     email: Joi.string()
         .email()
         .required()
@@ -159,11 +167,9 @@ const membershipFormSchema = Joi.object({
         }),
 
     abilities: Joi.string()
-        .min(2)
         .max(100)
         .messages({
             'string.base': 'Kompetenzen muss ein Text sein',
-            'string.min': 'Kompetenzen muss mindestens 2 Zeichen lang sein',
             'string.max': 'Kompetenzen darf maximal 100 Zeichen lang sein'
         }),
     
