@@ -5,13 +5,15 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
 const EmailService = require('./emailService');
+const CRMService = require('./crmService');
 const { validateContactForm, validateMembershipForm, validateHoneypot, detectSpam } = require('./validation');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize email service
+// Initialize services
 const emailService = new EmailService();
+const crmService = new CRMService();
 
 app.set('trust proxy', 1 /* number of proxies between user and server */)
 
@@ -33,6 +35,7 @@ const corsOptions = {
         const allowedOrigins = [
             process.env.FRONTEND_URL,
             'http://localhost:8080',
+            'http://localhost:1313',
             'http://localhost:3000',
             'https://buergerenergie-westsachsen.de',
             'https://www.buergerenergie-westsachsen.de'
@@ -87,12 +90,14 @@ app.use((req, res, next) => {
 app.get('/health', async (req, res) => {
     try {
         const emailStatus = await emailService.testConnection();
-        
+        const crmStatus = await crmService.testConnection();
+
         res.json({
             status: 'ok',
             timestamp: new Date().toISOString(),
             services: {
-                email: emailStatus ? 'connected' : 'disconnected'
+                email: emailStatus ? 'connected' : 'disconnected',
+                crm: crmStatus ? 'configured' : 'not configured'
             }
         });
     } catch (error) {
@@ -230,17 +235,45 @@ app.post('/api/membership', async (req, res) => {
             });
         }
 
-        // Send email
-        console.log('Sending membership email for:', validation.data.firstname, validation.data.lastname, validation.data.email);
-        const result = await emailService.sendMembershipEmail(validation.data);
+        let crmSubmitted = false;
+        let crmMemberId = null;
+        let crmError = null;
 
-        console.log('Membership email sent successfully:', result.messageId);
-        
-        res.json({
+        // Try to submit to GenoCRM first
+        try {
+            console.log('Submitting to GenoCRM:', validation.data.firstname, validation.data.lastname, validation.data.email);
+            const crmResult = await crmService.submitMemberApplication(validation.data);
+            crmSubmitted = true;
+            crmMemberId = crmResult.memberId;
+            console.log('GenoCRM submission successful, Member ID:', crmMemberId);
+        } catch (crmErr) {
+            console.error('GenoCRM submission failed:', crmErr.message);
+            crmError = crmErr.message;
+            // Continue to send email even if CRM submission fails
+        }
+
+        // Send email notification
+        console.log('Sending membership email for:', validation.data.firstname, validation.data.lastname, validation.data.email);
+        const emailResult = await emailService.sendMembershipEmail(validation.data);
+        console.log('Membership email sent successfully:', emailResult.messageId);
+
+        // Prepare response
+        const response = {
             success: true,
             message: 'Vielen Dank für Ihren Mitgliedsantrag! Wir werden uns zeitnah bei Ihnen melden.',
-            messageId: result.messageId
-        });
+            messageId: emailResult.messageId
+        };
+
+        // Add CRM info if successful
+        if (crmSubmitted && crmMemberId) {
+            response.crmSubmitted = true;
+            response.memberId = crmMemberId;
+        } else if (crmError) {
+            // Log the error but don't expose it to the user
+            console.warn('Application submitted via email only. CRM error:', crmError);
+        }
+
+        res.json(response);
 
     } catch (error) {
         console.error('Error processing membership form:', error);
