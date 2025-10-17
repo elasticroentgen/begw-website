@@ -257,6 +257,10 @@ app.post('/api/membership', async (req, res) => {
         const emailResult = await emailService.sendMembershipEmail(validation.data);
         console.log('Membership email sent successfully:', emailResult.messageId);
 
+        console.log('Sending membership confirmation email for:', validation.data.firstname, validation.data.lastname, validation.data.email);
+        const emailResultConfirm = await emailService.sendMembershipConfirmEmail(validation.data);
+        console.log('Membership confirmation email sent successfully:', emailResultConfirm.messageId);
+
         // Prepare response
         const response = {
             success: true,

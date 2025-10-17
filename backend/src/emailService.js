@@ -281,7 +281,7 @@ class EmailService {
             await this.transporter.verify();
 
             const template = await this.loadMembershipConfirmTemplate();
-            const htmlContent = this.replaceMembershipConfirmTemplateVariables(template, formData);
+            const htmlContent = await this.replaceMembershipConfirmTemplateVariables(template, formData);
 
             const mailOptions = {
                 from: {
@@ -322,7 +322,7 @@ class EmailService {
      * @param {string} bic - BIC
      * @param {number} amount - Transfer amount in EUR
      * @param {string} reference - Payment reference/purpose
-     * @returns {Promise<string>} SVG string of the QR code
+     * @returns {Promise<string>} Base64 data URI of the QR code PNG image
      */
     async generateEpcQrCode(accountName, iban, bic, amount, reference) {
         // EPC QR Code format (version 002)
@@ -336,24 +336,56 @@ class EmailService {
             accountName || '',               // Beneficiary Name
             iban || '',                      // Beneficiary IBAN
             `EUR${amount.toFixed(2)}`,       // Amount (EUR with 2 decimals)
-            '',                              // Purpose (empty)
-            reference || '',                 // Remittance Information (Structured)
-            ''                               // Remittance Information (Unstructured)
+            '',                 // Remittance Information (Structured)
+            '',                               // Remittance Information (Unstructured)
+            reference || ''                              // Purpose (empty)
         ].join('\n');
 
+        console.log('Generating EPC QR Code with data:', {
+            accountName,
+            iban,
+            bic,
+            amount,
+            reference,
+            epcDataLength: epcData.length
+        });
+
         try {
-            // Generate QR code as SVG string
-            const qrSvg = await QRCode.toString(epcData, {
-                type: 'svg',
+            // Generate QR code as base64 data URL (PNG format)
+            const qrDataUrl = await QRCode.toDataURL(epcData, {
                 errorCorrectionLevel: 'M',
-                margin: 1,
-                width: 450
+                margin: 2,
+                width: 450,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
             });
-            return qrSvg;
+
+            console.log('QR Code generated successfully as data URL, length:', qrDataUrl.length);
+
+            if (!qrDataUrl || qrDataUrl.trim().length === 0) {
+                throw new Error('QR code generation returned empty string');
+            }
+
+            return qrDataUrl;
         } catch (error) {
             console.error('Error generating EPC QR code:', error);
             throw new Error('Failed to generate payment QR code');
         }
+    }
+
+    /**
+     * Formats an IBAN into 4-character groups for better readability
+     * @param {string} iban - The IBAN to format
+     * @returns {string} Formatted IBAN with spaces every 4 characters
+     */
+    formatIban(iban) {
+        if (!iban) return '';
+        // Remove any existing spaces
+        const cleanIban = iban.replace(/\s/g, '');
+        // Split into groups of 4 characters
+        return cleanIban.match(/.{1,4}/g)?.join(' ') || cleanIban;
     }
 
     async replaceMembershipConfirmTemplateVariables(template, data) {
@@ -394,16 +426,21 @@ class EmailService {
         const bic = process.env.BANK_BIC || '';
 
         html = html.replace(/\{\{bankAccountName\}\}/g, accountName);
-        html = html.replace(/\{\{bankIban\}\}/g, iban);
+        html = html.replace(/\{\{bankIban\}\}/g, this.formatIban(iban));
         html = html.replace(/\{\{bankBic\}\}/g, bic);
 
         // Generate EPC QR Code for payment
         const amount = data.totalAmount || 250;
         const reference = `${data.firstname} ${data.lastname} Anteile`;
 
+        console.log('About to generate QR code for membership confirmation');
         try {
-            const qrCodeSvg = await this.generateEpcQrCode(accountName, iban, bic, amount, reference);
-            html = html.replace(/\{\{qrCodeSvg\}\}/g, qrCodeSvg);
+            const qrCodeDataUrl = await this.generateEpcQrCode(accountName, iban, bic, amount, reference);
+            console.log('QR code generated as data URL, length:', qrCodeDataUrl.length);
+            // Create an img tag with the base64 data URL
+            const qrCodeImg = `<img src="${qrCodeDataUrl}" alt="SEPA QR Code für Überweisung" style="max-width: 100%; height: auto; display: block;" />`;
+            html = html.replace(/\{\{qrCodeSvg\}\}/g, qrCodeImg);
+            console.log('QR code inserted into template as img tag');
         } catch (error) {
             console.error('Failed to generate QR code:', error);
             // Fallback to empty if QR generation fails
@@ -438,7 +475,7 @@ class EmailService {
         text += `ZAHLUNGSINFORMATIONEN:\n`;
         text += `Bitte überweisen Sie Ihre Geschäftsanteile an folgendes Konto:\n\n`;
         text += `Empfänger: ${accountName}\n`;
-        text += `IBAN: ${iban}\n`;
+        text += `IBAN: ${this.formatIban(iban)}\n`;
         text += `BIC: ${bic}\n`;
         text += `Verwendungszweck: ${data.firstname} ${data.lastname} Anteile\n`;
         text += `Betrag: ${(data.totalAmount || 250).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €\n\n`;

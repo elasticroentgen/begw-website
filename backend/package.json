@@ -4,8 +4,8 @@
   "description": "Contact form API for BEW website",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "start": "node -r dotenv/config src/server.js dotenv_config_path=.env.local",
+    "dev": "nodemon -r dotenv/config src/server.js dotenv_config_path=.env.local"
   },
   "dependencies": {
     "cors": "^2.8.5",
