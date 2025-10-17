@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs').promises;
 const path = require('path');
+const QRCode = require('qrcode');
 
 class EmailService {
     constructor() {
@@ -267,6 +268,182 @@ class EmailService {
         text += `RECHTLICHE BESTÄTIGUNGEN:\n`;
         text += `✓ Datenschutzerklärung akzeptiert\n`;
         text += `✓ Satzung gelesen\n\n`;
+        text += `---\n`;
+        text += `Diese E-Mail wurde automatisch über das Mitgliedsantragsformular der BEW-Website generiert.\n`;
+        text += `Bürgerenergie Westsachsen eG`;
+
+        return text;
+    }
+
+    async sendMembershipConfirmEmail(formData) {
+        try {
+            // Verify transporter configuration
+            await this.transporter.verify();
+
+            const template = await this.loadMembershipConfirmTemplate();
+            const htmlContent = this.replaceMembershipConfirmTemplateVariables(template, formData);
+
+            const mailOptions = {
+                from: {
+                    name: 'Bürgerenergie Westsachsen eG',
+                    address: process.env.MAIL_FROM
+                },
+                replyTo: process.env.MAIL_TO,
+                to: formData.email,
+                subject: `Ihr Mitgliedsantrag`,
+                html: htmlContent,
+                text: this.generateMembershipConfirmPlainTextEmail(formData)
+            };
+
+            const result = await this.transporter.sendMail(mailOptions);
+            console.log('Membership confirmation email sent successfully:', result.messageId);
+            return { success: true, messageId: result.messageId };
+
+        } catch (error) {
+            console.error('Error sending membership confirmation email:', error);
+            throw new Error(`Failed to send membership confirmation email: ${error.message}`);
+        }
+    }
+
+    async loadMembershipConfirmTemplate() {
+        try {
+            const templatePath = path.join(__dirname, '../templates/membership-confirm-template.html');
+            return await fs.readFile(templatePath, 'utf-8');
+        } catch (error) {
+            console.error('Error loading membership confirmation template:', error);
+            throw new Error('Failed to load membership confirmatio email template');
+        }
+    }
+
+    /**
+     * Generates an EPC QR code for SEPA bank transfers
+     * @param {string} accountName - Beneficiary name
+     * @param {string} iban - IBAN
+     * @param {string} bic - BIC
+     * @param {number} amount - Transfer amount in EUR
+     * @param {string} reference - Payment reference/purpose
+     * @returns {Promise<string>} SVG string of the QR code
+     */
+    async generateEpcQrCode(accountName, iban, bic, amount, reference) {
+        // EPC QR Code format (version 002)
+        // See: https://www.europeanpaymentscouncil.eu/document-library/guidance-documents/quick-response-code-guidelines-enable-data-capture-initiation
+        const epcData = [
+            'BCD',                           // Service Tag
+            '002',                           // Version
+            '1',                             // Character Set (1 = UTF-8)
+            'SCT',                           // Identification (SEPA Credit Transfer)
+            bic || '',                       // BIC (can be empty)
+            accountName || '',               // Beneficiary Name
+            iban || '',                      // Beneficiary IBAN
+            `EUR${amount.toFixed(2)}`,       // Amount (EUR with 2 decimals)
+            '',                              // Purpose (empty)
+            reference || '',                 // Remittance Information (Structured)
+            ''                               // Remittance Information (Unstructured)
+        ].join('\n');
+
+        try {
+            // Generate QR code as SVG string
+            const qrSvg = await QRCode.toString(epcData, {
+                type: 'svg',
+                errorCorrectionLevel: 'M',
+                margin: 1,
+                width: 450
+            });
+            return qrSvg;
+        } catch (error) {
+            console.error('Error generating EPC QR code:', error);
+            throw new Error('Failed to generate payment QR code');
+        }
+    }
+
+    async replaceMembershipConfirmTemplateVariables(template, data) {
+        let html = template;
+
+        // Basic personal information
+        html = html.replace(/\{\{firstname\}\}/g, data.firstname || '');
+        html = html.replace(/\{\{lastname\}\}/g, data.lastname || '');
+        html = html.replace(/\{\{email\}\}/g, data.email || '');
+
+        // Shares information
+        html = html.replace(/\{\{mandatoryShares\}\}/g, data.mandatoryShares || 1);
+        html = html.replace(/\{\{voluntaryShares\}\}/g, data['voluntary-shares'] || 0);
+        html = html.replace(/\{\{totalShares\}\}/g, data.totalShares || 1);
+        html = html.replace(/\{\{totalAmount\}\}/g, (data.totalAmount || 250).toLocaleString('de-DE', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+        html = html.replace(/\{\{mandatoryAmount\}\}/g, '250,00');
+        html = html.replace(/\{\{voluntaryAmount\}\}/g, ((data['voluntary-shares'] || 0) * 250).toLocaleString('de-DE', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+
+        // Timestamp
+        html = html.replace(/\{\{timestamp\}\}/g, new Date().toLocaleString('de-DE', {
+            timeZone: 'Europe/Berlin',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        }));
+
+        // Bank details
+        const accountName = process.env.BANK_ACCOUNT_NAME || 'Bürgerenergie Westsachsen eG';
+        const iban = process.env.BANK_IBAN || '';
+        const bic = process.env.BANK_BIC || '';
+
+        html = html.replace(/\{\{bankAccountName\}\}/g, accountName);
+        html = html.replace(/\{\{bankIban\}\}/g, iban);
+        html = html.replace(/\{\{bankBic\}\}/g, bic);
+
+        // Generate EPC QR Code for payment
+        const amount = data.totalAmount || 250;
+        const reference = `${data.firstname} ${data.lastname} Anteile`;
+
+        try {
+            const qrCodeSvg = await this.generateEpcQrCode(accountName, iban, bic, amount, reference);
+            html = html.replace(/\{\{qrCodeSvg\}\}/g, qrCodeSvg);
+        } catch (error) {
+            console.error('Failed to generate QR code:', error);
+            // Fallback to empty if QR generation fails
+            html = html.replace(/\{\{qrCodeSvg\}\}/g, '<p style="color: red;">QR Code konnte nicht generiert werden</p>');
+        }
+
+        return html;
+    }
+
+    generateMembershipConfirmPlainTextEmail(data) {
+        const timestamp = new Date().toLocaleString('de-DE', {
+            timeZone: 'Europe/Berlin',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const accountName = process.env.BANK_ACCOUNT_NAME || 'Bürgerenergie Westsachsen eG';
+        const iban = process.env.BANK_IBAN || '';
+        const bic = process.env.BANK_BIC || '';
+
+        let text = `Ihr Mitgliedsantrag\n\n`;
+        text += `Willkommen ${data.firstname} ${data.lastname}!\n\n`;
+        text += "Vielen Dank für Ihre Unterstützung der lokalen Energiewende!\n\n"
+        text += `Ihre Geschäftsanteile:\n`;
+        text += `Pflichtanteil: ${data.mandatoryShares} × 250,00 € = 250,00 €\n`;
+        text += `Freiwillige Anteile: ${data['voluntary-shares'] || 0} × 250,00 € = ${((data['voluntary-shares'] || 0) * 250).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €\n`;
+        text += `Gesamt: ${data.totalShares} Anteile = ${(data.totalAmount || 250).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €\n\n`;
+
+        text += `ZAHLUNGSINFORMATIONEN:\n`;
+        text += `Bitte überweisen Sie Ihre Geschäftsanteile an folgendes Konto:\n\n`;
+        text += `Empfänger: ${accountName}\n`;
+        text += `IBAN: ${iban}\n`;
+        text += `BIC: ${bic}\n`;
+        text += `Verwendungszweck: ${data.firstname} ${data.lastname} Anteile\n`;
+        text += `Betrag: ${(data.totalAmount || 250).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €\n\n`;
+
+        text += `Eingegangen am: ${timestamp}\n\n`;
         text += `---\n`;
         text += `Diese E-Mail wurde automatisch über das Mitgliedsantragsformular der BEW-Website generiert.\n`;
         text += `Bürgerenergie Westsachsen eG`;

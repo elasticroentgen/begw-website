@@ -16,7 +16,7 @@
                 <div class="logo-container">
                     <a href="{{ "/" | relURL }}">
                         <img src="{{ "assets/logo.jpeg" | relURL }}" alt="BEW Logo" class="logo" id="logo-placeholder">
-                        <span class="company-name">Bürgerenergie<br>Westsachsen eG i.G.</span>
+                        <span class="company-name">Bürgerenergie<br>Westsachsen eG</span>
                     </a>
                 </div>
                 <ul class="nav-menu">
@@ -24,8 +24,7 @@
                     <li><a href="{{ "/" | relURL }}#about" class="nav-link">Über uns</a></li>
                     <li><a href="{{ "/" | relURL }}#services" class="nav-link">Leistungen</a></li>
                     <li><a href="{{ "satzung" | relURL }}" class="nav-link{{ if eq .Title "Satzung" }} active{{ end }}">Satzung</a></li>
-                    <li><a href="{{ "mitgliedsantrag" | relURL }}" class="nav-link{{ if eq .Title "Mitgliedsantrag" }} active{{ end }}">Mitglied werden</a></li>
-                    <li><a href="{{ "kontakt" | relURL }}" class="nav-link{{ if eq .Title "Kontakt" }} active{{ end }}">Kontakt</a></li>
+                    <li><a href="{{ "mitgliedsantrag" | relURL }}" class="nav-link{{ if eq .Title "Mitgliedsantrag" }} active{{ end }} btn-secondary">Mitglied werden</a></li>
                 </ul>
                 <div class="hamburger">
                     <span class="bar"></span>
