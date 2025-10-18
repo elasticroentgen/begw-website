@@ -162,10 +162,37 @@ Durch klimaneutrale Energieerzeugung leisten wir einen konkreten Beitrag zum Kli
 <!-- CTA Section -->
 <section class="cta">
     <div class="container">
-        <div class="cta-content">
-            <h2>Werden Sie Teil der Energiewende</h2>
-            <p>Investieren Sie in eine nachhaltige Zukunft und profitieren Sie von stabilen Erträgen. Gemeinsam gestalten wir die Energieversorgung von morgen.</p>
-            <a href="{{ "mitgliedsantrag" | relURL }}" class="btn btn-primary btn-large">Jetzt Mitglied werden</a>
+        <div class="cta-grid">
+            <div class="cta-content">
+                <h2>Werden Sie Teil der Energiewende</h2>
+                <p>Investieren Sie in eine nachhaltige Zukunft und profitieren Sie von stabilen Erträgen. Gemeinsam gestalten wir die Energieversorgung von morgen.</p>
+                <a href="{{ "mitgliedsantrag" | relURL }}" class="btn btn-primary btn-large">Jetzt Mitglied werden</a>
+            </div>
+            <div class="newsletter-signup">
+                <h2>Newsletter abonnieren</h2>
+                <p>Bleiben Sie auf dem Laufenden mit dem Bürgerenergie Westsachsen Newsletter</p>
+                <div class="newsletter-success" id="newsletter-success" style="display: none;">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Vielen Dank für Ihre Anmeldung!</h3>
+                    <p>Bitte überprüfen Sie Ihr E-Mail-Postfach und bestätigen Sie Ihre Anmeldung.</p>
+                </div>
+                <form action="https://newsletter.buergerenergie-westsachsen.de/subscription/form" method="POST" class="newsletter-form" id="newsletter-form">
+                    <input type="hidden" name="nonce" />
+                    <div class="newsletter-form-row">
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Ihre E-Mail-Adresse" required aria-label="E-Mail-Adresse" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="name" placeholder="Ihr Name (optional)" aria-label="Name" />
+                        </div>
+                    </div>
+                    <input type="hidden" name="l" value="c9cefd64-2765-4931-8af5-c039d2c6c0b1" />
+                    <button type="submit" class="btn btn-primary btn-large">Anmelden</button>
+                    <p class="newsletter-note">Sie können sich jederzeit wieder abmelden.</p>
+                </form>
+            </div>
         </div>
     </div>
 </section>

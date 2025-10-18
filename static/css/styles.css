@@ -446,6 +446,16 @@ a:hover {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: var(--white);
     padding: 80px 0;
+}
+
+.cta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.cta-content {
     text-align: center;
 }
 
@@ -461,9 +471,6 @@ a:hover {
 .cta-content p {
     font-size: 1.2rem;
     margin-bottom: 2rem;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .cta .btn-primary {
@@ -474,6 +481,108 @@ a:hover {
 .cta .btn-primary:hover {
     background: var(--light-bg);
     transform: translateY(-2px);
+}
+
+/* Newsletter Signup */
+.newsletter-signup {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.newsletter-signup h2 {
+    color: var(--white);
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.newsletter-signup > p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.newsletter-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.newsletter-form .form-group {
+    margin-bottom: 0;
+}
+
+.newsletter-form input[type="email"],
+.newsletter-form input[type="text"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+}
+
+.newsletter-form input[type="email"]:focus,
+.newsletter-form input[type="text"]:focus {
+    outline: none;
+    border-color: var(--white);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+.newsletter-form input::placeholder {
+    color: var(--text-light);
+}
+
+.newsletter-form button {
+}
+
+.newsletter-note {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.newsletter-success {
+    text-align: center;
+    padding: 2rem;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.newsletter-success .success-icon {
+    font-size: 3rem;
+    color: var(--white);
+    margin-bottom: 1rem;
+}
+
+.newsletter-success h3 {
+    color: var(--white);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.newsletter-success p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Page Header */
@@ -855,6 +964,16 @@ a:hover {
 
     .services-grid {
         grid-template-columns: 1fr;
+    }
+
+    .cta-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .newsletter-form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
     }
 
     .hero-image .energy-icon {
