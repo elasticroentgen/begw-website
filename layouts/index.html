@@ -56,6 +56,60 @@ Durch klimaneutrale Energieerzeugung leisten wir einen konkreten Beitrag zum Kli
         </div>
     </div>
 </section>
+<!-- News Section -->
+<section id="aktuelles" class="news-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Aktuelles</h2>
+            <p>Neuigkeiten und Updates aus der Genossenschaft</p>
+        </div>
+        {{ $posts := where site.RegularPages "Section" "aktuelles" }}
+        {{ $posts := first 3 ($posts.ByDate.Reverse) }}
+        {{ if ge (len $posts) 3 }}
+        <div class="news-grid">
+            <!-- Featured Post (Most Recent) -->
+            {{ $featured := index $posts 0 }}
+            <article class="news-featured">
+                {{ if $featured.Params.image }}
+                <div class="news-image">
+                    <a href="{{ $featured.Permalink }}">
+                        <img src="{{ $featured.Params.image | relURL }}" alt="{{ $featured.Title }}">
+                    </a>
+                    {{ if $featured.Params.photographer }}
+                    <p class="image-copyright">Foto: {{ $featured.Params.photographer }}</p>
+                    {{ end }}
+                </div>
+                {{ end }}
+                <div class="news-content">
+                    <div class="news-meta">
+                        <time datetime="{{ $featured.Date.Format "2006-01-02" }}">{{ $featured.Date.Format "02.01.2006" }}</time>
+                    </div>
+                    <h3><a href="{{ $featured.Permalink }}">{{ $featured.Title }}</a></h3>
+                    <p>{{ $featured.Params.description | default $featured.Summary }}</p>
+                    <a href="{{ $featured.Permalink }}" class="read-more">Weiterlesen →</a>
+                </div>
+            </article>
+
+            <!-- Secondary Posts -->
+            <div class="news-secondary">
+                {{ range after 1 $posts }}
+                <article class="news-card">
+                    <div class="news-meta">
+                        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
+                    </div>
+                    <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                    <p>{{ .Params.description | default (truncate 100 .Summary) }}</p>
+                    <a href="{{ .Permalink }}" class="read-more">Weiterlesen →</a>
+                </article>
+                {{ end }}
+            </div>
+        </div>
+        {{ end }}
+        <div class="news-cta">
+            <a href="{{ "aktuelles" | relURL }}" class="btn btn-primary">Alle Beiträge ansehen</a>
+        </div>
+    </div>
+</section>
 
 <!-- Services Section -->
 <section id="services" class="services">
@@ -103,6 +157,7 @@ Durch klimaneutrale Energieerzeugung leisten wir einen konkreten Beitrag zum Kli
         </div>
     </div>
 </section>
+
 
 <!-- CTA Section -->
 <section class="cta">

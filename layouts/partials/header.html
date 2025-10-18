@@ -21,6 +21,7 @@
                 </div>
                 <ul class="nav-menu">
                     <li><a href="{{ "/" | relURL }}" class="nav-link{{ if .IsHome }} active{{ end }}">Start</a></li>
+                    <li><a href="{{ "aktuelles" | relURL }}" class="nav-link{{ if eq .Section "aktuelles" }} active{{ end }}">Aktuelles</a></li>
                     <li><a href="{{ "/" | relURL }}#about" class="nav-link">Über uns</a></li>
                     <li><a href="{{ "/" | relURL }}#services" class="nav-link">Leistungen</a></li>
                     <li><a href="{{ "satzung" | relURL }}" class="nav-link{{ if eq .Title "Satzung" }} active{{ end }}">Satzung</a></li>
