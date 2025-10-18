@@ -313,7 +313,7 @@ a:hover {
 }
 
 .about {
-    background: var(--white);
+    background: var(--light-bg);
 }
 
 .services {
@@ -1283,8 +1283,8 @@ a:focus {
 
 /* News Section on Homepage */
 .news-section {
-    padding: 80px 0;
-    background: var(--light-bg);
+    padding-bottom: 80px;
+    background: var(--white);
 }
 
 .news-grid {
@@ -1440,5 +1440,102 @@ a:focus {
 
     .news-content h3 {
         font-size: 1.5rem;
+    }
+}
+
+/* Team Section */
+.team-section {
+    padding: 60px 0;
+}
+
+.team-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.team-member {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.team-member:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.team-member-image {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+    background: var(--light-bg);
+}
+
+.team-member-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Default positioning - adjust per image using inline styles */
+    object-position: center center;
+    /* Adjust scale per image using transform: scale(X) in inline styles */
+    transition: transform 0.3s ease;
+}
+
+.team-member:hover .team-member-image img {
+    transform: scale(1.05);
+}
+
+.team-member-info {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.team-member-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.team-member-role {
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.team-member-quote {
+    font-style: italic;
+    color: var(--text-light);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.team-divider {
+    margin: 4rem 0;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .team-member-image {
+        height: 250px;
     }
 }
