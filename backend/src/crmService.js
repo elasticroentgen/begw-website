@@ -57,7 +57,8 @@ class CRMService {
                 city: memberData.city,
                 country: 'Deutschland',
                 birthDate: birthDate,
-                notes: this.buildNotes(memberData)
+                notes: this.buildNotes(memberData),
+                requestedShares: memberData.totalShares
             };
 
             console.log('Submitting member application to GenoCRM:', {
