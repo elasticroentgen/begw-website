@@ -1,3 +1,4 @@
+.DS_Store
 public/
 **/.env.local
 **/node_modules

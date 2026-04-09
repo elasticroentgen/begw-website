@@ -17,7 +17,7 @@ Denn Strandbad, Campingplatz, Bungalows, Sommerrodelbahn, Minigolf und das neue 
 
 ## Das Projekt
 
-Gemeinsam mit der Netzwerkfabrik, einem erfahrenen PV-Installateur aus der Region, errichten wir auf den Dächern der Gebäude am Stausee eine Photovoltaikanlage mit knapp 100 kWp Leistung. 204 Solarmodule auf über 400 Quadratmetern Dachfläche werden künftig sauberen Strom genau dort erzeugen, wo er gebraucht wird.
+Gemeinsam mit der Netzweltfabrik, einem erfahrenen PV-Installateur aus der Region, errichten wir auf den Dächern der Gebäude am Stausee eine Photovoltaikanlage mit knapp 100 kWp Leistung. 204 Solarmodule auf über 400 Quadratmetern Dachfläche werden künftig sauberen Strom genau dort erzeugen, wo er gebraucht wird.
 
 Der Betreiber der Freizeitanlage, die Tourismus und Sport GmbH des Landkreises Zwickau, bezieht den erzeugten Strom direkt von uns. Der Eigenverbrauchsanteil liegt bei bemerkenswerten 96,5 Prozent. Was auf dem Dach entsteht, fließt direkt in Strandbad, Restaurant und Campingplatz. Ein Batteriespeicher ist deshalb nicht erforderlich.
 
@@ -38,7 +38,7 @@ Zusätzlich entsteht eine Ladesäule für Elektroautos, an der Mitarbeitende ihr
 
 ## Langfristige Partnerschaft
 
-Der Stromliefervertrag mit der Tourismus und Sport GmbH läuft über 20 Jahre. Der Verkaufspreis ist für die ersten 10 Jahre festgeschrieben. Das schafft Planungssicherheit – für die GmbH und für unsere Genossenschaft.
+Der Stromliefervertrag mit der Tourismus und Sport GmbH läuft über 20 Jahre. Der Verkaufspreis des Stromes ist für die ersten 10 Jahre festgeschrieben. Das schafft Planungssicherheit – für die GmbH und für unsere Genossenschaft.
 
 ## Werden Sie Teil der Energiewende vor Ihrer Haustür
 
