@@ -204,6 +204,7 @@ class EmailService {
         html = html.replace(/\{\{lastname\}\}/g, data.lastname || '');
         html = html.replace(/\{\{email\}\}/g, data.email || '');
         html = html.replace(/\{\{phone\}\}/g, data.phone || '');
+        html = html.replace(/\{\{whatsapp\}\}/g, data.whatsapp === 'on' ? 'Ja' : 'Nein');
         html = html.replace(/\{\{birthdate\}\}/g, data.birthdate || '');
         html = html.replace(/\{\{street\}\}/g, data.street || '');
         html = html.replace(/\{\{zipcode\}\}/g, data.zipcode || '');
@@ -255,6 +256,7 @@ class EmailService {
         if (data.phone) {
             text += `Telefon: ${data.phone}\n`;
         }
+        text += `WhatsApp-Gruppe gewünscht: ${data.whatsapp === 'on' ? 'Ja' : 'Nein'}\n`;
         text += `Adresse: ${data.street}\n`;
         text += `         ${data.zipcode} ${data.city}\n\n`;
         text += `Kompetenzen: ${data.abilities || 'Keine Angabe'}\n\n`;

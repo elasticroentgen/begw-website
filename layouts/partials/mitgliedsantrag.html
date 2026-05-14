@@ -53,8 +53,15 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="phone">Telefonnummer</label>
-                        <input type="phone" id="phone" name="phone">
+                        <label for="phone" id="phone-label">Telefonnummer<span id="phone-required-marker" style="display:none;"> *</span></label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="whatsapp" name="whatsapp">
+                            Aufnahme in WhatsApp-Gruppe erwünscht
+                        </label>
                     </div>
 
                     <div class="form-group">

@@ -138,13 +138,19 @@ const membershipFormSchema = Joi.object({
         .pattern(/^[\d\s\+\-\(\)\/]+$/)
         .min(6)
         .max(30)
-        .allow('')
+        .when('whatsapp', {
+            is: 'on',
+            then: Joi.required(),
+            otherwise: Joi.allow('')
+        })
         .messages({
             'string.pattern.base': 'Telefonnummer enthält ungültige Zeichen',
             'string.min': 'Telefonnummer muss mindestens 6 Zeichen lang sein',
-            'string.max': 'Telefonnummer darf maximal 30 Zeichen lang sein'
+            'string.max': 'Telefonnummer darf maximal 30 Zeichen lang sein',
+            'string.empty': 'Telefonnummer ist erforderlich, wenn Aufnahme in die WhatsApp-Gruppe gewünscht ist',
+            'any.required': 'Telefonnummer ist erforderlich, wenn Aufnahme in die WhatsApp-Gruppe gewünscht ist'
         }),
-    
+
     street: Joi.string()
         .min(5)
         .max(200)
@@ -249,7 +255,11 @@ const membershipFormSchema = Joi.object({
             'any.only': 'Sie müssen die Satzung akzeptieren und dem Beitritt zur Genossenschaft zustimmen',
             'any.required': 'Sie müssen die Satzung akzeptieren und dem Beitritt zur Genossenschaft zustimmen'
         }),
-    
+
+    whatsapp: Joi.string()
+        .valid('on')
+        .optional(),
+
     captcha: Joi.number()
         .integer()
         .min(0)

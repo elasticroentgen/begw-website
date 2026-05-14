@@ -600,7 +600,18 @@ if (membershipForm) {
     // Listen for changes to voluntary shares input
     voluntarySharesInput.addEventListener('input', updateSharesCalculation);
     voluntarySharesInput.addEventListener('change', updateSharesCalculation);
-    
+
+    // WhatsApp checkbox toggles the visual "*" marker on the phone label.
+    // We intentionally do NOT set the `required` attribute on the input — that would
+    // trigger native HTML5 validation and bypass our custom error messages.
+    const whatsappCheckbox = document.getElementById('whatsapp');
+    const phoneRequiredMarker = document.getElementById('phone-required-marker');
+    if (whatsappCheckbox && phoneRequiredMarker) {
+        whatsappCheckbox.addEventListener('change', function() {
+            phoneRequiredMarker.style.display = whatsappCheckbox.checked ? '' : 'none';
+        });
+    }
+
     // Form submission handling
     membershipForm.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -631,6 +642,19 @@ if (membershipForm) {
         if (!/^[0-9]{5}$/.test(formObject.zipcode)) {
             showAlert('Bitte geben Sie eine gültige 5-stellige Postleitzahl ein.', 'error');
             return;
+        }
+
+        // Phone is required when WhatsApp opt-in is selected
+        if (formObject.whatsapp === 'on') {
+            const phoneValue = (formObject.phone || '').trim();
+            if (!phoneValue) {
+                showAlert('Bitte geben Sie eine Telefonnummer an, wenn Sie in die WhatsApp-Gruppe aufgenommen werden möchten.', 'error');
+                return;
+            }
+            if (phoneValue.length < 6 || !/^[\d\s\+\-\(\)\/]+$/.test(phoneValue)) {
+                showAlert('Bitte geben Sie eine gültige Telefonnummer ein.', 'error');
+                return;
+            }
         }
         
         // Validate shares
