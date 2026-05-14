@@ -4,8 +4,8 @@ date: 2026-04-08
 draft: false
 description: "Sonnenstrom für den Stausee Oberwald: Unsere Genossenschaft baut eine 100 kWp Solaranlage auf den Dächern der beliebten Freizeitanlage im Landkreis Zwickau"
 
-image: "assets/posts/stausee-planung.jpeg"
-photographer: "Thomas Bergbauer, Netzwelt Fabrik"
+image: "assets/posts/stausee-1.jpeg"
+photographer: "Patrick Simmel/Netzwelt Fabrik"
 ---
 
 
