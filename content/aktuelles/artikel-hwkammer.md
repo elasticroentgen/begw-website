@@ -2,7 +2,7 @@
 title: "Handwerk und Bürgerenergie: Eine sinnvolle Verbindung"
 date: 2026-05-08
 draft: false
-description: "Bürgerenergie trifft Handwerk – ein Beitrag in der Deutschen Handerks Zeitung mit unserem Mitglied Robert Heinze"
+description: "Bürgerenergie trifft Handwerk – ein Beitrag in der Deutschen Handwerks Zeitung mit unserem Mitglied Robert Heinze"
 photographer: "DHZ/privat"
 image: "assets/posts/hwk-1.png"
 ---
